@@ -1,0 +1,141 @@
+.become-expert {
+  padding: 50px 100px;
+
+  .video {
+    position: relative;
+    display: grid;
+    place-items: center;
+
+    img {
+      width: 100%;
+    }
+
+    .description {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+
+      h3 {
+        color: white;
+        font-weight: bold;
+        font-size: 36px;
+        width: 70%;
+        text-align: center;
+      }
+
+      .button {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background-color: white;
+        cursor: pointer;
+        position: relative;
+
+        svg {
+          font-size: 26px;
+          color: $link_hover;
+        }
+      }
+    }
+  }
+
+  .element-widget {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
+    h3 {
+      text-align: center;
+      font-size: 36px;
+    }
+
+    .items {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+
+      .item {
+        display: flex;
+        flex-direction: row;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        gap: 10px;
+
+        &__number {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #e9efff;
+          border-radius: 50%;
+          color: $link_hover;
+          font-size: 30px;
+          font-weight: bold;
+          min-width: 50px;
+          height: 50px;
+        }
+
+        &__description {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+
+          h6 {
+            font-size: 20px;
+          }
+
+          p {
+            color: $gray_color;
+            line-height: 1.5;
+          }
+        }
+      }
+    }
+  }
+
+  .people {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+
+    &__item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: center;
+      align-items: center;
+
+      &__image {
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      &__description {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        h3 {
+          font-size: 20px;
+          font-weight: bold;
+        }
+
+        p {
+          color: $gray_color;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}

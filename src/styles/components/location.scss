@@ -1,0 +1,35 @@
+.location {
+  display: flex;
+  flex-direction: column;
+
+  .mySwiper {
+    width: 100%;
+
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+  }
+
+  &__description {
+    padding: 50px;
+
+    .title {
+      margin-bottom: 20px;
+    }
+    .description {
+      color: $gray_color;
+    }
+  }
+  &__place {
+    padding: 50px;
+    h2 {
+      margin-bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+    .places {
+      margin-top: 50px;
+    }
+  }
+}
