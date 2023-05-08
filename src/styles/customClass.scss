@@ -1,0 +1,239 @@
+.btn {
+    width: max-content;
+    display: inline-flex;
+    align-items: center;
+    color: #76bc21;
+    background-color: #fff;
+    padding: 0.4rem 1.6rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    border: 1px solid #76bc21;
+    transition: var(--transition);
+    font-size: 14px;
+    &-primary {
+        background-color: #76bc21;
+        color: #fff;
+    }
+    &-danger {
+        border: 1px solid red;
+        color: red;
+        font-weight: 600;
+        &:hover {
+            background-color: red;
+            color: white;
+        }
+    }
+    &:hover:not(.btn.btn-danger):not(:disabled) {
+        background-color: #84d225;
+        color: #fff;
+        border-color: transparent;
+    }
+    // &:disabled,
+    // [disabled],
+    // :not([disabled]):hover {
+    //   color: var(--color-primary);
+    //   background-color: var(--color-secondary);
+    //   border-color: transparent;
+    //   cursor: default;
+    // }
+
+    &:disabled {
+        background-color: var(--color-primary);
+        border: none;
+        cursor: not-allowed;
+        &:hover {
+            background-color: var(--color-primary);
+            border-color: transparent;
+        }
+    }
+}
+
+.w-container {
+    padding: 0.625rem 0.9375rem; //10px 15px
+    background-color: var(--color-white);
+    box-shadow: var(--color-box-shadow-light);
+    margin-top: 0.625rem;
+    margin-bottom: 0.9375rem;
+    border-radius: 0.65rem;
+}
+
+.title {
+    font-weight: 600;
+    color: var(--color-primary);
+    padding-bottom: 10px;
+    &-bottom-line {
+        border-bottom: 1px solid var(--color-line);
+    }
+    &-top-line {
+        border-top: 1px solid var(--color-line);
+        margin-top: 10px;
+        padding-top: 10px;
+    }
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.small-text {
+    font-weight: 600;
+    color: var(--color-primary);
+    font-size: 0.83em; // h5 font size
+}
+
+.red {
+    color: red !important;
+}
+
+.green {
+    color: #76bc21 !important;
+}
+
+.fs-tiny {
+    font-size: 0.8rem;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.p {
+    &-relative {
+        position: relative;
+    }
+    &-absolute {
+        position: absolute;
+    }
+    &-fixed {
+        position: fixed;
+    }
+}
+
+.justify {
+    &-center {
+        justify-content: center;
+    }
+    &-between {
+        justify-content: space-between;
+    }
+    &-start {
+        justify-content: start;
+    }
+    &-end {
+        justify-content: end;
+    }
+    &-evenly {
+        justify-content: space-evenly;
+    }
+    &-around {
+        justify-content: space-around;
+    }
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.align-center {
+    align-items: center;
+}
+
+// margin dynamically
+$margin-directions: ('top', 'right', 'bottom', 'left');
+$margin-values: (
+    0,
+    0.2,
+    0.4,
+    0.6,
+    0.8,
+    1,
+    1.2,
+    1.4,
+    1.6,
+    1.8,
+    2,
+    2.2,
+    2.4,
+    2.6,
+    2.8,
+    3,
+    3.2,
+    3.4,
+    3.6,
+    3.8,
+    4,
+    4.2,
+    4.4,
+    4.6,
+    4.8,
+    5,
+    5.2,
+    5.4,
+    5.6,
+    5.8,
+    6,
+    6.2,
+    6.4,
+    6.6,
+    6.8,
+    7
+);
+
+@each $direction in $margin-directions {
+    @each $value in $margin-values {
+        .m#{str-slice($direction, 0, 1)}-#{($value * 10)} {
+            margin-#{$direction}: #{$value}rem !important;
+        }
+    }
+}
+
+// padding dynamically
+$padding-directions: ('top', 'right', 'bottom', 'left');
+$padding-values: (
+    0,
+    0.2,
+    0.4,
+    0.6,
+    0.8,
+    1,
+    1.2,
+    1.4,
+    1.6,
+    1.8,
+    2,
+    2.2,
+    2.4,
+    2.6,
+    2.8,
+    3,
+    3.2,
+    3.4,
+    3.6,
+    3.8,
+    4,
+    4.2,
+    4.4,
+    4.6,
+    4.8,
+    5,
+    5.2,
+    5.4,
+    5.6,
+    5.8,
+    6,
+    6.2,
+    6.4,
+    6.6,
+    6.8,
+    7
+);
+
+@each $direction in $padding-directions {
+    @each $value in $padding-values {
+        .p#{str-slice($direction, 0, 1)}-#{($value * 10)} {
+            padding-#{$direction}: #{$value}rem !important;
+        }
+    }
+}

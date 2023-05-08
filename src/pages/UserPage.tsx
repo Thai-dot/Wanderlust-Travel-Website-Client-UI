@@ -5,7 +5,6 @@ import User from "../components/User";
 const UserPage = () => {
   return (
     <div className="main-page">
-      <Breadcrumb />
       <User />
     </div>
   );

@@ -9,14 +9,14 @@ interface IntroduceProps {
 const Index = (props: IntroduceProps) => {
   const hotel = useAppSelector((state) => state.hotel);
   return (
-    <section className="top-destinations">
-      <h1 className="">{props.name}</h1>
-      {props.name === "Top destinations" ? (
-        <SwiperComponent />
-      ) : (
-        <Places hotels={hotel.hotels} loading={hotel.loading} />
-      )}
-    </section>
+      <section className="top-destinations">
+          <h1 className="">{props.name}</h1>
+          {props.name === 'Top destinations' ? (
+              <SwiperComponent />
+          ) : (
+              <Places  tours={hotel.hotels} loading={false} />
+          )}
+      </section>
   );
 };
 

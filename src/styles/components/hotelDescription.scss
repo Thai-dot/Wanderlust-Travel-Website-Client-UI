@@ -22,9 +22,11 @@
     "main image1 image2"
     "main image3 image4";
   margin: 50px;
+  margin-top: 25px;
   border-radius: 10px;
   overflow: hidden;
   gap: 10px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
   .main-image {
     grid-area: main;

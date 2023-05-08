@@ -1,9 +1,12 @@
-import { Slider } from '@mui/material';
+import { CircularProgress, Slider } from '@mui/material';
+import { useQuery } from 'react-query';
 import React, { useEffect, useState } from 'react';
 import { AiFillStar } from 'react-icons/ai';
-import { useAppSelector } from '../../app/hooks';
-import { Hotel } from '../../models/hotel';
+import Pagination from '@mui/material/Pagination';
 import Places from '../Home/Introduce/Places';
+
+import axiosClientInstance from '../../service/axios/axiosClient/axiosClient';
+import Error from '../Error/Error';
 
 function valuetext(value: number) {
     return `${value}°C`;
@@ -11,51 +14,8 @@ function valuetext(value: number) {
 
 const minDistance = 0;
 
-const exampleTour = [
-    {
-        _id: '1',
-        destination: {
-            locationName: 'string'
-        },
-        nameHotel: 'string',
-        images: [],
-        description: 'string',
-        price: 122222,
-        rating: 4,
-        reviews: [
-            {
-                user: {
-                    username: 'string',
-                    fullName: 'string',
-                    email: 'string',
-                    phoneNumber: 'string',
-                    role: 0,
-                    _id: '12'
-                },
-                star: 1,
-                description: 'string',
-                _id: '1'
-            }
-        ],
-        facilities: {
-            airportTransport: true,
-            fitnessCenter: true,
-            heater: true,
-            internet: true,
-            restaurant: true,
-            spa: true,
-            waterAndDryer: true,
-            airConditioner: true,
-            hotWater: true,
-            shampoo: true,
-            tv: true
-        }
-    }
-];
-
 const Filter = () => {
-    const hotel = useAppSelector((state) => state.hotel);
-    const [filterHotels, setFilterHotels] = useState<Hotel[]>([]);
+    const [filterTours, setFilterTours] = useState<any>([]);
     const [filter, setFilter] = useState({
         minPrice: 0,
         maxPrice: 300,
@@ -64,11 +24,47 @@ const Filter = () => {
         facilities: [],
         hotelThemes: []
     });
+    const [page, setPage] = React.useState(1);
+    const fetchTour = () => {
+        return axiosClientInstance
+            .get('/api/customers/tours', {
+                params: {
+                    Page: page,
+                    PageSize: 12
+                }
+            })
+            .then((res) => res.data);
+    };
+
+    const { isLoading, error, data, refetch } = useQuery(
+        'getTourClient',
+        fetchTour,
+        {
+            enabled: false
+        }
+    );
+
+    const handleChangePagination = (
+        event: React.ChangeEvent<unknown>,
+        value: number
+    ) => {
+        setPage(value);
+    };
+
+    React.useEffect(() => {
+        refetch();
+    }, [page]);
 
     useEffect(() => {
         handleFilter();
-    }, [hotel]);
-    
+    }, []);
+
+    useEffect(() => {
+        if (data) {
+            setFilterTours(data);
+        }
+    }, [data]);
+
     const handleChange = (
         event: Event,
         newValue: number | number[],
@@ -91,31 +87,7 @@ const Filter = () => {
         }
     };
 
-    const handleFilter = () => {
-        let newHotels: Hotel[] = [];
-
-        hotel.hotels.map((hotel: Hotel) => {
-            if (
-                hotel.price >= filter.minPrice &&
-                hotel.price <= filter.maxPrice
-            ) {
-                console.log(filter.reviewScore, hotel.rating);
-                if (filter.reviewScore.length > 0) {
-                    if (
-                        filter.reviewScore.includes(
-                            (hotel.rating + '') as never
-                        )
-                    ) {
-                        newHotels.push(hotel);
-                    }
-                } else {
-                    newHotels.push(hotel);
-                }
-            }
-        });
-
-        setFilterHotels(newHotels);
-    };
+    const handleFilter = () => {};
 
     const handleCheckbox = (
         e: React.MouseEvent<HTMLInputElement, MouseEvent>
@@ -140,6 +112,9 @@ const Filter = () => {
             }
         }
     };
+
+    if (isLoading) return <CircularProgress />;
+    if (error) return <Error error={error} />;
     return (
         <div className="filter">
             <div className="filter__board">
@@ -304,10 +279,28 @@ const Filter = () => {
                 </button>
             </div>
             <div className="filter__items">
-                <div className="number">
-                    <span>{filterHotels.length}</span> hotels found
-                </div>
-                <Places hotels={exampleTour} loading={false} />
+                {data && (
+                    <>
+                        <div className="number">
+                            <span>{data?.totalRecords}</span> tour(s) found
+                        </div>
+                        <Places tours={filterTours} loading={isLoading} />
+                        <div
+                            style={{
+                                textAlign: 'center',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                marginTop: '2rem'
+                            }}
+                        >
+                            <Pagination
+                                count={data.totalPages}
+                                page={page}
+                                onChange={handleChangePagination}
+                            />
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

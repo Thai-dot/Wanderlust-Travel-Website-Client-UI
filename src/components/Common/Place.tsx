@@ -7,22 +7,18 @@ import { Hotel } from '../../models/hotel';
 import exampleImg from '../../assets/images/California.jpg';
 
 interface PlaceProp {
-    hotel: Hotel;
+    tour: any;
 }
 
-const Place: React.FC<PlaceProp> = ({ hotel }) => {
-    const dispatch = useDispatch();
-    const handleAddToFavourite = (_id: string) => {
-        dispatch(favouriteAction.create(_id));
-    };
+const Place: React.FC<PlaceProp> = ({ tour }) => {
     return (
         <div className="place">
             <div className="place__image">
-                <AiOutlineHeart
-                    onClick={() => handleAddToFavourite(hotel._id as string)}
-                    style={{ cursor: 'pointer' }}
+                <AiOutlineHeart style={{ cursor: 'pointer' }} />
+                <img
+                    src={tour.tourImage !== '' ? tour.tourImage : exampleImg}
+                    alt="place img"
                 />
-                <img src={exampleImg} alt="place" />
             </div>
             <div className="place__description">
                 <div className="rating">
@@ -32,13 +28,16 @@ const Place: React.FC<PlaceProp> = ({ hotel }) => {
                     <AiFillStar />
                     <AiFillStar />
                 </div>
-                <Link to={`/hotel/${hotel._id}`}>
-                    <h3>{hotel.nameHotel}</h3>
+                <Link to={`/tour/${tour.id}`} >
+                    <h4 style={{textTransform: "capitalize"}}>{tour.tourName}</h4>
                 </Link>
-                <h6>{hotel.destination.locationName}</h6>
+                <h6>{tour.tourCode}</h6>
             </div>
-            <div className="place__prices">
-                From: <span className="price">${hotel.price}</span> / night
+            <div className="place__prices" style={{ display: "flex", gap:"1rem" }}>
+                <div className="price"> Day: {tour.days}</div>
+                <div>
+                    <span className="price"> Nights: {tour.nights}</span>
+                </div>
             </div>
         </div>
     );

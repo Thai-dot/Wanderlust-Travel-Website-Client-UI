@@ -4,46 +4,47 @@ $secondaryColor: #555;
 // Define styles for the footer component
 .footer {
     margin-top: 1rem;
-  background-color: #f5f5f5;
-  padding: 20px;
-  color: $secondaryColor;
+    background-color: #f5f5f5;
+    padding: 20px;
+    color: $secondaryColor;
+  
 
-  .footer-content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: start;
+    .footer-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: start;
 
-    .footer-section {
-      flex-basis: 50%;
+        .footer-section {
+            flex-basis: 50%;
 
-      h4 {
-        color: $primaryColor;
-        font-size: 1.2rem;
-        margin-bottom: 10px;
-      }
-
-      p {
-        margin: 5px 0;
-      }
-
-      ul {
-        list-style: none;
-        padding: 0;
-
-        li {
-          margin-bottom: 5px;
-
-          a {
-            color: $secondaryColor;
-            text-decoration: none;
-
-            &:hover {
-              color: $primaryColor;
+            h4 {
+                color: $primaryColor;
+                font-size: 1.2rem;
+                margin-bottom: 10px;
             }
-          }
+
+            p {
+                margin: 5px 0;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+
+                li {
+                    margin-bottom: 5px;
+
+                    a {
+                        color: $secondaryColor;
+                        text-decoration: none;
+
+                        &:hover {
+                            color: $primaryColor;
+                        }
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }

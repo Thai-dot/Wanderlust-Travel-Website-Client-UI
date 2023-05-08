@@ -7,13 +7,13 @@ import paymentSaga from "../features/payment/paymentSaga";
 import roomSaga from "../features/room/roomSaga";
 
 export default function* rootSaga() {
-  console.log("Root saga");
-  yield all([
-    authSaga(),
-    destinationSaga(),
-    hotelSaga(),
-    favouriteSaga(),
-    roomSaga(),
-    paymentSaga(),
-  ]);
+  // console.log("Root saga");
+  // yield all([
+  //   authSaga(),
+  //   destinationSaga(),
+  //   hotelSaga(),
+  //   favouriteSaga(),
+  //   roomSaga(),
+  //   paymentSaga(),
+  // ]);
 }

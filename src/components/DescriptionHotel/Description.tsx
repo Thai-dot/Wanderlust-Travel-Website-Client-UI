@@ -122,7 +122,7 @@ const Description = () => {
             <About
               name="About this hotel"
               type={1}
-              description={hotel.hotel?.description}
+              descriptionData={hotel.hotel?.description}
             />
             <About
               name="Hotel Facilities"
