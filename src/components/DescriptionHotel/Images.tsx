@@ -1,21 +1,13 @@
 interface ImagesProps {
-  images: string[] | undefined;
+    image: string | undefined;
 }
 
 const Images = (props: ImagesProps) => {
-  return (
-    <div className="images">
-      {props.images?.map((image, i) => {
-     
-        return (
-          <div className={`image ${i === 0 && "main-image"}`}>
-            <img src={image} alt="place" key={i} />
-          </div>
-        );
-      })}
-    
-    </div>
-  );
+    return (
+        <div className="image d-flex flex-center" style={{ width: '100%' }}>
+            <img src={props.image} alt="place" />
+        </div>
+    );
 };
 
 export default Images;

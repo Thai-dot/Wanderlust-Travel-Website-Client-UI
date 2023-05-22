@@ -12,7 +12,6 @@ const SwiperRoom = () => {
   const room = useAppSelector((state) => state.room);
   const params = useParams();
 
-  console.log(room.rooms);
   return (
     <Swiper
       slidesPerView={1}

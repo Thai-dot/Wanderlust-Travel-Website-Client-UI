@@ -8,9 +8,10 @@ import exampleImg from '../../assets/images/California.jpg';
 
 interface PlaceProp {
     tour: any;
+    id: number;
 }
 
-const Place: React.FC<PlaceProp> = ({ tour }) => {
+const Place: React.FC<PlaceProp> = ({ tour, id }) => {
     return (
         <div className="place">
             <div className="place__image">
@@ -28,12 +29,17 @@ const Place: React.FC<PlaceProp> = ({ tour }) => {
                     <AiFillStar />
                     <AiFillStar />
                 </div>
-                <Link to={`/tour/${tour.id}`} >
-                    <h4 style={{textTransform: "capitalize"}}>{tour.tourName}</h4>
+                <Link to={`/tour/${id}`}>
+                    <h4 style={{ textTransform: 'capitalize' }}>
+                        {tour.tourName}
+                    </h4>
                 </Link>
                 <h6>{tour.tourCode}</h6>
             </div>
-            <div className="place__prices" style={{ display: "flex", gap:"1rem" }}>
+            <div
+                className="place__prices"
+                style={{ display: 'flex', gap: '1rem' }}
+            >
                 <div className="price"> Day: {tour.days}</div>
                 <div>
                     <span className="price"> Nights: {tour.nights}</span>

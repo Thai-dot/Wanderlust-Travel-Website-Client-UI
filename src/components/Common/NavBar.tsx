@@ -5,17 +5,28 @@ import { NavLink } from 'react-router-dom';
 import Logo from '../../assets/images/logoTravel.png';
 import California from '../../assets/images/California.jpg';
 import authFirebase from '../../service/firebase/SignInWithProvider/getAuth';
+import { getCookie, removeCookie } from '../../utils/cookies';
+import { isTokenExpired } from '../../utils/jwtFunction';
 
 const NavBar = () => {
+    const token = getCookie('accessToken') ?? '';
+
     const handleLogout = () => {
         authFirebase
             .signOut()
             .then((message) => {
-                console.log(message);
+                removeCookie('accessToken');
+                removeCookie('id');
                 window.location.href = '/login';
             })
             .catch((err) => console.error(err));
     };
+
+    React.useEffect(() => {
+        if (token && isTokenExpired(token)) {
+            handleLogout();
+        }
+    }, [token]);
 
     const [user, setUser] = useState<any>(false);
 

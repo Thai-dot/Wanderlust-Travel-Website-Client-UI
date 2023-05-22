@@ -10,20 +10,23 @@ import DescriptionTour from '../components/DescriptionHotel/TourDetail';
 import axiosClientInstance from '../service/axios/axiosClient/axiosClient';
 import Error from '../components/Error/Error';
 import { CircularProgress } from '@mui/material';
+import exampleImage from '../assets/images/California.jpg';
 
 const TourDetail = () => {
     const { id } = useParams();
 
     const fetchTour = () => {
         return axiosClientInstance
-            .get(`/api/customers/tours/${id}`)
+            .get(`/api/customers/tourDates/${id}`)
             .then((res) => res.data);
     };
 
     const { isLoading, error, data, refetch } = useQuery(
-        'getTourDetailClient',
+        'getTourDateDetailClient',
         fetchTour
     );
+
+    console.log(data);
 
     if (isLoading) {
         return <Skeleton width={'100%'} height={'300px'} />;
@@ -37,21 +40,13 @@ const TourDetail = () => {
             {data ? (
                 <>
                     <div className="description-room">
-                        <h3>{data?.tourName ?? ''}</h3>
+                        <h3>{data?.tour.tourName ?? ''}</h3>
                         <span className="place">
-                            <CodeIcon /> {data.departureAddress}
+                            <CodeIcon /> {data?.tour?.tourCode}
                         </span>
                     </div>
-                    <Images
-                        images={[
-                            data?.tourImage,
-                            data?.tourImage,
-                            data?.tourImage,
-                            data?.tourImage,
-                            data?.tourImage
-                        ]}
-                    />
-                    <DescriptionTour tourData={data} />
+                    <Images image={data?.tour.tourImage || exampleImage} />
+                    <DescriptionTour tourData={data.tour} />
                 </>
             ) : (
                 <CircularProgress />

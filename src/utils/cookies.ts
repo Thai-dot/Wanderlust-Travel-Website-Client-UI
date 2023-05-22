@@ -19,3 +19,7 @@ export function getCookie(name:string) {
     }
     return null;
 }
+
+export function removeCookie(name: string): void {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:01 GMT; max-age=0; path=/;`;
+}

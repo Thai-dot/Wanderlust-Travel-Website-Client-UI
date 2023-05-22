@@ -27,7 +27,7 @@ const Filter = () => {
     const [page, setPage] = React.useState(1);
     const fetchTour = () => {
         return axiosClientInstance
-            .get('/api/customers/tours', {
+            .get('/api/customers/tourDates', {
                 params: {
                     Page: page,
                     PageSize: 12
@@ -37,7 +37,7 @@ const Filter = () => {
     };
 
     const { isLoading, error, data, refetch } = useQuery(
-        'getTourClient',
+        'getTourDateClient',
         fetchTour,
         {
             enabled: false

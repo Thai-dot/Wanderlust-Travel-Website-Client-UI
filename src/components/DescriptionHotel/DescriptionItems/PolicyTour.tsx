@@ -7,7 +7,6 @@ interface PolicyTourProps {
 export default function PolicyTour(props: PolicyTourProps) {
     const { policyData } = props;
 
-    console.log(policyData);
     return (
         <div className="about__facilities">
             {policyData ?? (

@@ -35,7 +35,7 @@ const Description = () => {
 
   return (
     <Fragment>
-      <Images images={hotel.hotel?.images} />
+      {/* <Images images={hotel.hotel?.images} /> */}
       {hotel.loadingHotel ? (
         <div className="hotel">
           <div className="hotel__describe">

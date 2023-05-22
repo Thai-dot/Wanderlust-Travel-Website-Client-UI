@@ -20,11 +20,9 @@ googleProvider.setCustomParameters({
 });
 
 const SignInWithProvider = () => {
-
     const signInWithGoogle = () => {
         signInWithPopup(authFirebase, googleProvider)
             .then(async (res: any) => {
-                console.log(res);
                 await axios
                     .post(
                         'https://localhost:7210/api/customers/login-by-providers',
@@ -34,7 +32,9 @@ const SignInWithProvider = () => {
                         }
                     )
                     .then((finalRes) => {
-                        setCookie('id', finalRes.data.customer.id,1 )
+                        setCookie('id', finalRes.data.customer.id, 2);
+                        setCookie('accessToken', finalRes.data.token, 2);
+
                         window.location.href = '/';
                     })
                     .catch((err) => console.log(err));
@@ -57,9 +57,7 @@ const SignInWithProvider = () => {
                         }
                     )
                     .then((finalRes) => {
-                        
-                    
-                          window.location.href = '/';
+                        window.location.href = '/';
                     })
                     .catch((err) => console.log(err));
             })

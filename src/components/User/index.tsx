@@ -1,114 +1,304 @@
 import { CircularProgress } from '@mui/material';
+import { useQuery } from 'react-query';
+import TextField from '@mui/material/TextField/TextField';
+import { InputAdornment, IconButton } from '@mui/material';
+import Grid from '@mui/material/Grid/Grid';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import dayjs, { Dayjs } from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { CalendarToday } from '@mui/icons-material';
+
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { authAction } from '../../features/auth/authSlice';
+import React, { useEffect, useState, FormEventHandler } from 'react';
 import UserInput from './UserInput';
+import axiosClientInstance from '../../service/axios/axiosClient/axiosClient';
+import { getCookie } from '../../utils/cookies';
+import provinceVN from '../../constant/VietnamDivision/VietnamProvince';
+import districtVN from '../../constant/VietnamDivision/VietnamDistrict';
+import {
+    getDistrictFromProvince,
+    getWardFromDistrict
+} from '../../constant/dataMapping/Division';
+import validate from '../../utils/validation';
+import { toISOString } from '../../utils/dateFunction';
+import ShowTextForSeconds from '../ShowTextForSeconds/ShowTextForSeconds';
+import Error from '../Error/Error';
 
 const User = () => {
-    const dispatch = useAppDispatch();
+    const userID = getCookie('id');
 
-    const userID = useAppSelector((state) => state.auth.id);
-
-    console.log(userID);
-
-    const [userUpdate, setUserUpdate] = useState({
-        fullName: '',
+    const initialUser = {
+        address: '',
+        dateOfBirth: '',
         email: '',
-        phoneNumber: ''
-    });
+        facebook: '',
+        fullName: '',
+        gender: '',
+        instagram: '',
+        phoneNumber: '',
+        city: '',
+        district: '',
+        ward: ''
+    };
+    const [user, setUser] = useState(initialUser);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserUpdate({ ...userUpdate, [e.target.name]: e.target.value });
+    const [addLoading, setAddLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+
+    const fetchData = () => {
+        return axiosClientInstance
+            .get(`/api/customers/${userID}`)
+            .then((res: any) => res.data);
     };
 
-    const handleSubmit = (
-        e: React.FormEvent<HTMLButtonElement> | undefined
-    ) => {
-        e?.preventDefault();
-        dispatch(authAction.update(userUpdate));
+    const { isLoading, error, data, refetch } = useQuery(
+        'MyGetClientCustomerAPI',
+        fetchData
+    );
+
+    useEffect(() => {
+        if (data) {
+            setUser({
+                address: data?.address,
+                city: data?.city,
+                dateOfBirth: data?.dateOfBirth,
+                district: data?.district,
+                email: data?.email,
+                facebook: data?.facebook,
+                fullName: data?.fullName,
+                gender: data?.gender,
+                instagram: data?.instagram,
+                phoneNumber: data?.phoneNumber,
+                ward: data?.ward
+            });
+        }
+    }, [data]);
+
+    const handleChange = (e: any) => {
+        setUser({ ...user, [e.target.name]: e.target.value });
     };
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        setAddLoading(true);
+        try {
+            axiosClientInstance
+                .put(`/api/customers/${userID}/edit`, {
+                    address: user.address,
+                    dateOfBirth: toISOString(user.dateOfBirth),
+                    email: user.email,
+                    facebook: user.facebook,
+                    fullName: user.fullName,
+                    gender: Number(user.gender),
+                    instagram: user.instagram,
+                    phoneNumber: user.phoneNumber,
+                    city: user.city,
+                    district: user.district,
+                    ward: user.ward
+                })
+                .then((res: any) => {
+                    setSuccessMessage('Updated successfully');
+                });
+
+            setAddLoading(false);
+        } catch (error) {
+            setAddLoading(false);
+            console.log(error);
+        }
+    };
+
+    if (isLoading) return <CircularProgress />;
+    if (error) return <Error error={error} />;
+
     return (
         <div className="user">
-            <form className="personal-info">
+            <form className="personal-info" onSubmit={handleSubmit}>
                 <h5>Personal Information</h5>
-                <div className="group-input">
-                    <UserInput
-                        name="username"
-                        title="Username"
-                        type="text"
-                        disabled={true}
-                        handleChange={handleChange}
-                    />
+                <Grid container columnSpacing={2} spacing={2} sx={{ mt: 2 }}>
+                    <Grid item xs={6} md={4}>
+                        <TextField
+                            name="fullName"
+                            title="Full Name"
+                            type="text"
+                            label="Full Name"
+                            fullWidth
+                            error={validate.stringRequiredValidate(
+                                user.fullName,
+                                127
+                            )}
+                            helperText={validate.stringRequiredTextValidate(
+                                user.fullName,
+                                'Full Name',
+                                127
+                            )}
+                            value={user.fullName}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">
+                                Gender
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={user.gender}
+                                label="Gender"
+                                name="gender"
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={1}>Male</MenuItem>
+                                <MenuItem value={2}>Female</MenuItem>
+                                <MenuItem value={3}>Others</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <TextField
+                            name="email"
+                            title="Email"
+                            type="email"
+                            label="Email"
+                            fullWidth
+                            value={user.email}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <FormControl fullWidth>
+                            <InputLabel id="province">Province/City</InputLabel>
+                            <Select
+                                labelId="label-province"
+                                id="label-province"
+                                value={user.city}
+                                label="Province/City"
+                                name="city"
+                                onChange={handleChange}
+                            >
+                                {provinceVN.map((item) => (
+                                    <MenuItem value={item.code}>
+                                        {item.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <FormControl fullWidth>
+                            <InputLabel id="district">District</InputLabel>
+                            <Select
+                                labelId="label-district"
+                                id="label-district"
+                                value={user.district}
+                                label="District"
+                                name="district"
+                                disabled={!user.city}
+                                onChange={handleChange}
+                            >
+                                {getDistrictFromProvince(Number(user.city)).map(
+                                    (item) => (
+                                        <MenuItem value={item.code}>
+                                            {item.name}
+                                        </MenuItem>
+                                    )
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <FormControl fullWidth>
+                            <InputLabel id="ward">Ward</InputLabel>
+                            <Select
+                                labelId="label-ward"
+                                id="label-ward"
+                                value={user.ward}
+                                label="Ward"
+                                name="ward"
+                                disabled={!user.district || !user.city}
+                                onChange={handleChange}
+                            >
+                                {getWardFromDistrict(Number(user.district)).map(
+                                    (item) => (
+                                        <MenuItem value={item.code}>
+                                            {item.name}
+                                        </MenuItem>
+                                    )
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <TextField
+                            name="address"
+                            title="Address"
+                            type="text"
+                            label="Address"
+                            fullWidth
+                            value={user.address}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <TextField
+                            name="phoneNumber"
+                            title="Phone Number"
+                            type="text"
+                            label="Phone Number"
+                            fullWidth
+                            value={user.phoneNumber}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                label="Birthday"
+                                value={user.dateOfBirth}
+                                onChange={(newValue: any) =>
+                                    setUser({ ...user, dateOfBirth: newValue })
+                                }
+                                renderInput={(params) => (
+                                    <TextField {...params} fullWidth />
+                                )}
+                            />
+                        </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <TextField
+                            name="facebook"
+                            title="Facebook"
+                            type="text"
+                            label="Facebook"
+                            fullWidth
+                            value={user.facebook}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                        <TextField
+                            name="instagram"
+                            title="Instagram"
+                            type="text"
+                            label="Instagram"
+                            fullWidth
+                            value={user.instagram}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                </Grid>
 
-                    <UserInput
-                        name="email"
-                        title="Email"
-                        type="email"
-                        required={true}
-                        value={userUpdate.email}
-                        handleChange={handleChange}
-                    />
-                    <UserInput
-                        name="phoneNumber"
-                        title="Phone number"
-                        type="number"
-                        required={true}
-                        value={userUpdate.phoneNumber}
-                        handleChange={handleChange}
-                    />
-                </div>
-                <div className="group-input">
-                    <UserInput
-                        name="address"
-                        title="Address"
-                        type="text"
-                        required={true}
-                        // value={user?.}
-                        handleChange={handleChange}
-                    />
-                    <UserInput
-                        name="fullName"
-                        title="Full name"
-                        type="text"
-                        required={true}
-                        value={userUpdate.fullName}
-                        handleChange={handleChange}
-                    />
-                    <UserInput
-                        name="_id"
-                        title="ID"
-                        type="text"
-                        required={true}
-                        disabled={true}
-                        handleChange={handleChange}
-                    />
-                </div>
-                <div className="group-input">
-                    <UserInput
-                        name="createdAt"
-                        title="Created At"
-                        type="text"
-                        disabled={true}
-                        handleChange={handleChange}
-                    />
-                    <UserInput
-                        name="updatedAt"
-                        title="Updated At"
-                        type="text"
-                        disabled={true}
-                        handleChange={handleChange}
-                    />
-                    <UserInput
-                        name="role"
-                        title="Role"
-                        type="text"
-                        disabled={true}
-                        handleChange={handleChange}
-                    />
-                </div>
-                <button className="submit-btn" onClick={handleSubmit}>
-                    {false ? (
+                {successMessage && (
+                    <ShowTextForSeconds text={successMessage} seconds={3} />
+                )}
+
+                <button className="submit-btn" type="submit">
+                    {addLoading ? (
                         <CircularProgress color="inherit" size={'16px'} />
                     ) : (
                         'Save Changes'

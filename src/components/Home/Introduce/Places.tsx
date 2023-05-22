@@ -13,7 +13,7 @@ const Places: React.FC<PlaceProp> = (props) => {
     console.log(tours);
     return (
         <div className="places">
-            {loading && !tours ? (
+            {loading && !tours.data ? (
                 <div className="place">
                     <div className="place__image">
                         <Skeleton height="100%" />
@@ -33,7 +33,9 @@ const Places: React.FC<PlaceProp> = (props) => {
                     </div>
                 </div>
             ) : (
-                tours?.data?.map((tour: any) => <Place tour={tour} />)
+                tours?.data?.map((tour: any) => (
+                    <Place tour={tour.tour} id={tour.id} />
+                ))
             )}
         </div>
     );
