@@ -1,23 +1,20 @@
-import React, { useEffect } from 'react';
-import CodeIcon from '@mui/icons-material/Code';
-import Skeleton from 'react-loading-skeleton';
-import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-
-import Breadcrumb from '../components/Common/Breadcrumb';
-import Images from '../components/DescriptionHotel/Images';
-import DescriptionTour from '../components/DescriptionHotel/TourDetail';
+import React from 'react';
 import axiosClientInstance from '../service/axios/axiosClient/axiosClient';
+import { useParams } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
 import Error from '../components/Error/Error';
-import { CircularProgress } from '@mui/material';
+import Images from '../components/DescriptionHotel/Images';
+import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import exampleImage from '../assets/images/California.jpg';
+import { useQuery } from 'react-query';
+import DescriptionQuotation from '../components/Quotation/DescriptionQuotation';
 
-const TourDetail = () => {
+function CustomerQuotation() {
     const { id } = useParams();
 
     const fetchTour = () => {
         return axiosClientInstance
-            .get(`/api/customers/tourDates/${id}`)
+            .get(`/api/quotations/${id}`)
             .then((res) => res.data);
     };
 
@@ -25,8 +22,6 @@ const TourDetail = () => {
         'getTourDateDetailClient',
         fetchTour
     );
-
-    console.log(data);
 
     if (isLoading) {
         return <Skeleton width={'100%'} height={'300px'} />;
@@ -40,15 +35,16 @@ const TourDetail = () => {
                 <>
                     <div className="description-room">
                         <h2>
-                            [{data?.tourDateCode}] {data?.tour.tourName ?? ''}
+                            [{data?.quotationCode}] {data?.quotationName ?? ''}
                         </h2>
                     </div>
                     <Images image={data?.tour.tourImage || exampleImage} />
-                    <DescriptionTour
+                    <DescriptionQuotation
                         tourData={data.tour}
-                        tourPrice={data.tourDateCostStatementTable.sellingPrice}
-                        tourDateCode={data.tourDateCode}
-                        departureDate={data.date}
+                        departureDate={data.startDate}
+                        noOfPax={data.noOfPax}
+                        noOfChild={data.noOfChild}
+                        pricePerPerson={data.totalPrice}
                     />
                 </>
             ) : (
@@ -56,6 +52,6 @@ const TourDetail = () => {
             )}
         </main>
     );
-};
+}
 
-export default TourDetail;
+export default CustomerQuotation;

@@ -1,0 +1,33 @@
+.booking-information {
+    border-radius: 10px;
+    border: 1px solid #d7dce3;
+    padding: 20px;
+}
+
+.tourist {
+    &-form {
+        border-radius: 10px;
+        border: 1px solid #d7dce3;
+        padding: 20px;
+        margin-top: 30px;
+    }
+
+    &-item {
+        margin: 10px 0;
+        h5 {
+            margin-bottom: 5px;
+        }
+    }
+}
+
+.payment-info {
+    border-radius: 10px;
+    border: 1px solid #d7dce3;
+    padding: 20px;
+    p{
+        margin: 10px 0;
+    }
+    span{
+        font-size: 18px;
+    }
+}

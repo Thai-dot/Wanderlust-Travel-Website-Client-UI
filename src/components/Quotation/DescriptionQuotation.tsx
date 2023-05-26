@@ -1,21 +1,18 @@
 import React, { Fragment } from 'react';
-import About from '../DescriptionItems/About';
-import BookingRoom from '../Booking/BookingRoom';
-import SwiperRoom from '../../Swiper/SwiperRoom';
-import { BiArea } from 'react-icons/bi';
-import CodeIcon from '@mui/icons-material/Code';
-import { IoBedOutline } from 'react-icons/io5';
-import { MdChildCare, MdOutlinePersonOutline } from 'react-icons/md';
+import About from '../DescriptionHotel/DescriptionItems/About';
+import QuotationInfo from './QuotationInfo';
+import EditQuotation from './EditQuotation';
 
-interface DescriptionTourProp {
+interface DescriptionQuotationType {
     tourData: any;
-    tourPrice: number;
-    tourDateCode: string;
     departureDate: string;
+    noOfPax: number;
+    noOfChild: number;
+    pricePerPerson: number;
 }
 
-const DescriptionTour = (props: DescriptionTourProp) => {
-    const { tourData, tourPrice, tourDateCode, departureDate } = props;
+function DescriptionQuotation(props: DescriptionQuotationType) {
+    const { tourData, departureDate, noOfPax, noOfChild, pricePerPerson} = props;
 
     return (
         <Fragment>
@@ -36,18 +33,20 @@ const DescriptionTour = (props: DescriptionTourProp) => {
                         type={7}
                         descriptionData={tourData}
                     />
+                    <EditQuotation />
                 </div>
-                <div className="tour__status">
-                    <BookingRoom
-                        tourData={tourData}
-                        tourPrice={tourPrice}
-                        tourDateCode={tourDateCode}
+                <div>
+                    <QuotationInfo
+                        quotationName={tourData.tourName}
                         departureDate={departureDate}
+                        noOfPax={noOfPax}
+                        noOfChild={noOfChild}
+                        pricePerPerson={pricePerPerson}
                     />
                 </div>
             </div>
         </Fragment>
     );
-};
+}
 
-export default DescriptionTour;
+export default DescriptionQuotation;

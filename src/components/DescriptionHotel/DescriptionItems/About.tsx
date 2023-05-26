@@ -32,16 +32,26 @@ const About = (props: AboutProps) => {
     console.log(descriptionData);
     return (
         <div className="about__hotel">
-            <h3 style={{ textTransform: 'capitalize' }}>{props.name}</h3>
+            <h3 style={{ textTransform: 'capitalize', marginBottom: '20px' }}>
+                {props.name}
+            </h3>
             <div className="about__describe">
-                {props.type === 1 &&
+                {props.type === 1 && (
+                    <div>
+                        <StringHtml
+                            htmlString={descriptionData.introduceInformation}
+                            style={{ lineHeight: '1.8' }}
+                        />
+                    </div>
+                )}
+                {props.type === 2 &&
                     descriptionData.tourPrograms.map((tourDate: any) => {
                         return (
                             <div key={tourDate.id}>
-                                <h4>Day: {tourDate.date}</h4>
+                                <h4>Ngày: {tourDate.date}</h4>
                                 <div className="ml-10">
-                                    <div className="d-flex align-center mt-6 mb-6">
-                                        <h6>Place(s):&nbsp;</h6>
+                                    <div className=" mt-6 mb-6">
+                                        <h5>Các địa điểm tham quan:</h5>
                                         {tourDate.destinations.map(
                                             (place: any, index: number) => {
                                                 return (
@@ -65,10 +75,11 @@ const About = (props: AboutProps) => {
                                             }
                                         )}
                                     </div>
-                                    <div className="tour__content d-flex align-center mb-6">
-                                        <h6>Description:&nbsp;</h6>
+                                    <div className="tour__content  mb-6">
+                                        <h5>Mô tả chi tiết cho</h5>
                                         <StringHtml
                                             htmlString={tourDate.programContent}
+                                            style={{ lineHeight: '1.8' }}
                                         />
                                     </div>
                                 </div>
@@ -77,24 +88,12 @@ const About = (props: AboutProps) => {
                             </div>
                         );
                     })}
-                {props.type === 2 && (
-                    <Facilities facilities={props.facilities} />
-                )}
                 {props.type === 3 && <Rules />}
                 {props.type === 4 && <RoomAvailable />}
                 {props.type === 5 && <Reviews />}
                 {props.type === 6 && <DatePickerComponent />}
                 {props.type === 7 && (
-                    <PolicyTour
-                        policyData={
-                            (descriptionData.introduceInformation,
-                            descriptionData.containInformation,
-                            descriptionData.notContainPolicy,
-                            descriptionData.cancellationPolicy,
-                            descriptionData.paymentPolicy,
-                            descriptionData.childrenPolicy)
-                        }
-                    />
+                    <PolicyTour policyData={descriptionData} />
                 )}
             </div>
         </div>

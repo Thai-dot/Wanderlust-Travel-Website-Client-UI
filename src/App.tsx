@@ -26,6 +26,8 @@ import WishListPage from './pages/WishListPage';
 import LocationPage from './pages/LocationPage';
 import NotFoundPage from './pages/NotFoundPage';
 import './styles/index.scss';
+import BookingInformation from './components/BookingInformation/BookingInformation';
+import CustomerQuotation from './pages/CustomerQuotation';
 
 const App = () => {
     const queryClient = new QueryClient({
@@ -52,8 +54,9 @@ const App = () => {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/filter" element={<FilterPage />} />
                     <Route path="/become-expert" element={<BecomeExpert />} />
-
-                    <Route path="/" element={<PrivateRoute />}>
+                    <Route path="/tour/:id/booking-information" element={ <BookingInformation />} />
+                    <Route path="my-quotations/:id" element={<CustomerQuotation />} />
+                    <Route path="/" element={<PrivateRoute />}> 
                         <Route
                             path="/checkout/:id"
                             element={<CheckoutPage />}
@@ -64,6 +67,7 @@ const App = () => {
                         />
                         <Route path="/user-setting" element={<UserPage />} />
                         <Route path="/wish-list" element={<WishListPage />} />
+                        <Route path="my-quotations/:id" element={<CustomerQuotation />} />
                     </Route>
 
                     <Route path="/location/:id" element={<LocationPage />} />
