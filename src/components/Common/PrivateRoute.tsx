@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import authFirebase from '../../service/firebase/SignInWithProvider/getAuth';
 import { getCookie } from '../../utils/cookies';
 import { isTokenExpired } from '../../utils/jwtFunction';
@@ -13,6 +13,8 @@ function PrivateRoute() {
 
     const currentToken = getCookie('accessToken') ?? '';
     const currentID = getCookie('id') ?? '';
+
+    
 
     useEffect(() => {
         const handleBeforeUnload = () => {
@@ -32,12 +34,12 @@ function PrivateRoute() {
             }
         };
 
-        const unsubscribe = authFirebase.onAuthStateChanged(
+        const unsubscribe = authFirebase?.onAuthStateChanged(
             handleAuthStateChanged
         );
 
         if (isTokenExpired(currentToken)) {
-            firebase.auth().signOut();
+            firebase?.auth().signOut();
         }
 
         return () => {

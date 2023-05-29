@@ -14,9 +14,10 @@ interface PlaceProp {
     tourDateCode: number;
     date: any;
     id: number;
+    sellingPrice:number;
 }
 
-const Place: React.FC<PlaceProp> = ({ tour, tourDateCode, date, id }) => {
+const Place: React.FC<PlaceProp> = ({ tour, tourDateCode, date, id,sellingPrice }) => {
     return (
         <div className="place">
             <div className="place__image">
@@ -51,7 +52,8 @@ const Place: React.FC<PlaceProp> = ({ tour, tourDateCode, date, id }) => {
                         color: '#FF2D54'
                     }}
                 >
-                    <SellIcon /> {'16.000.000'} vnđ
+                    <SellIcon /> {Intl.NumberFormat().format(sellingPrice)}{' '}
+                    vnđ/1ng
                 </div>
                 <div
                     style={{
@@ -78,7 +80,7 @@ const Place: React.FC<PlaceProp> = ({ tour, tourDateCode, date, id }) => {
                             gap: '0.75rem'
                         }}
                     >
-                        <CalendarMonthIcon /> {date.slice(0,10)}
+                        <CalendarMonthIcon /> {date.slice(0, 10)}
                     </div>
                 </div>
             </div>

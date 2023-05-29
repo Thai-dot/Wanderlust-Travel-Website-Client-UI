@@ -10,6 +10,9 @@ interface QuotationInfoType {
     noOfPax: number;
     noOfChild: number;
     pricePerPerson: number;
+    currentStatus: number;
+    editValue: string;
+    handleQuotation: (type: number) => any;
 }
 
 const THEME = createTheme({
@@ -32,23 +35,31 @@ const THEME = createTheme({
 });
 
 function QuotationInfo(props: QuotationInfoType) {
-    const { quotationName, departureDate, noOfPax, noOfChild, pricePerPerson } =
-        props;
+    const {
+        quotationName,
+        departureDate,
+        noOfPax,
+        noOfChild,
+        pricePerPerson,
+        handleQuotation,
+        currentStatus,
+        editValue
+    } = props;
     const navigate = useNavigate();
     const totalPrice =
         noOfPax * pricePerPerson + noOfChild * pricePerPerson * 0.7;
 
     const tourDateId = 1;
 
-    const handleOnSubmit = (event: any) => {
-        sessionStorage.setItem('tourName', quotationName);
-        sessionStorage.setItem('departureDate', departureDate);
-        sessionStorage.setItem('noOfPax', noOfPax.toString());
-        sessionStorage.setItem('noOfChild', noOfChild.toString());
-        sessionStorage.setItem('totalPrice', totalPrice.toString());
+    // const handleOnSubmit = (event: any) => {
+    //     sessionStorage.setItem('tourName', quotationName);
+    //     sessionStorage.setItem('departureDate', departureDate);
+    //     sessionStorage.setItem('noOfPax', noOfPax.toString());
+    //     sessionStorage.setItem('noOfChild', noOfChild.toString());
+    //     sessionStorage.setItem('totalPrice', totalPrice.toString());
 
-        navigate(`/tour/${tourDateId}/booking-information`);
-    };
+    //     navigate(`/tour/${tourDateId}/booking-information`);
+    // };
 
     return (
         <div className="payment-info">
@@ -90,21 +101,75 @@ function QuotationInfo(props: QuotationInfoType) {
             >
                 {Intl.NumberFormat().format(totalPrice)} vnđ
             </h3>
-            <ThemeProvider theme={THEME}>
-                <Stack
-                    spacing={2}
-                    direction="column"
-                    sx={{ marginTop: '20px' }}
-                >
-                    <a href="#editQuotation" style={{ display: 'block' }}>
-                        <Button variant="text" sx={{ width: '100%' }}>
-                            Yêu cầu chỉnh sửa
-                        </Button>
-                    </a>
-                    <Button variant="contained" onClick={handleOnSubmit}>Đặt tour</Button>
-                    <Button variant="outlined">Hủy tour</Button>
-                </Stack>
-            </ThemeProvider>
+            {currentStatus === 7 && (
+                <div className="red mt-10" style={{ textAlign: 'center' }}>
+                    Báo giá đã hủy
+                </div>
+            )}
+            {currentStatus === 4 && (
+                <div className="green mt-10" style={{ textAlign: 'center' }}>
+                    Báo giá đã xác nhận
+                </div>
+            )}
+            {currentStatus === 5 && (
+                <div className="yellow mt-10" style={{ textAlign: 'center' }}>
+                    Báo giá đang chờ chỉnh sửa
+                </div>
+            )}
+            {currentStatus !== 7 &&
+                currentStatus !== 4 &&
+                currentStatus !== 5 && (
+                    <ThemeProvider theme={THEME}>
+                        <Stack
+                            spacing={2}
+                            direction="column"
+                            sx={{ marginTop: '20px' }}
+                        >
+                            {editValue.length !== 0 &&
+                            editValue.length <= 1500 ? (
+                                <Button
+                                    onClick={() => {
+                                        handleQuotation(1);
+                                    }}
+                                    variant="text"
+                                    sx={{ width: '100%' }}
+                                >
+                                    Yêu cầu chỉnh sửa
+                                </Button>
+                            ) : (
+                                <a
+                                    href="#editQuotation"
+                                    style={{ display: 'block' }}
+                                >
+                                    <Button
+                                        variant="text"
+                                        sx={{ width: '100%' }}
+                                    >
+                                        Yêu cầu chỉnh sửa
+                                    </Button>
+                                </a>
+                            )}
+
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    handleQuotation(2);
+                                }}
+                            >
+                                Xác nhận báo giá
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                style={{ color: 'red', borderColor: 'red' }}
+                                onClick={() => {
+                                    handleQuotation(3);
+                                }}
+                            >
+                                Hủy tour
+                            </Button>
+                        </Stack>
+                    </ThemeProvider>
+                )}
         </div>
     );
 }

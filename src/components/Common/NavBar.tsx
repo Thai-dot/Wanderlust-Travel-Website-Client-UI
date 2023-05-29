@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { AiOutlineShoppingCart, AiOutlineUser } from 'react-icons/ai';
 import { BiChevronDown } from 'react-icons/bi';
 import { NavLink } from 'react-router-dom';
 import Logo from '../../assets/images/logoTravel.png';
 import California from '../../assets/images/California.jpg';
 import authFirebase from '../../service/firebase/SignInWithProvider/getAuth';
-import { getCookie, removeCookie } from '../../utils/cookies';
+import { getCookie, removeCookie, setCookie } from '../../utils/cookies';
 import { isTokenExpired } from '../../utils/jwtFunction';
 
 const NavBar = () => {
     const token = getCookie('accessToken') ?? '';
+
+    const isExpired = isTokenExpired(token);
+
+    
 
     const handleLogout = () => {
         authFirebase
@@ -21,19 +26,14 @@ const NavBar = () => {
             })
             .catch((err) => console.error(err));
     };
-
-    React.useEffect(() => {
-        if (token && isTokenExpired(token)) {
-            handleLogout();
-        }
-    }, [token]);
-
-    const [user, setUser] = useState<any>(false);
+    const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
         const unsubscribe = authFirebase.onAuthStateChanged((user) => {
             if (user) {
                 setUser(user);
+            } else {
+                setUser(null); // Set user state to null when there is no authenticated user
             }
         });
 
@@ -102,7 +102,7 @@ const NavBar = () => {
                 </div>
                 <div className="dropdown">
                     <div className="action dropdown__button">
-                        {user?.photoURL ? (
+                        {user?.photoURL && !isExpired ? (
                             <img
                                 src={user.photoURL}
                                 style={{
@@ -117,7 +117,7 @@ const NavBar = () => {
                         )}
                     </div>
                     <div className="dropdown__menu">
-                        {user ? (
+                        {user && !isExpired ? (
                             <div
                                 style={{
                                     display: 'flex',

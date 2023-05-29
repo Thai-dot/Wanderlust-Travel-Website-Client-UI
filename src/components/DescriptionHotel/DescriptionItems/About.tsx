@@ -29,7 +29,7 @@ interface AboutProps {
 
 const About = (props: AboutProps) => {
     const { descriptionData } = props;
-    console.log(descriptionData);
+    
     return (
         <div className="about__hotel">
             <h3 style={{ textTransform: 'capitalize', marginBottom: '20px' }}>

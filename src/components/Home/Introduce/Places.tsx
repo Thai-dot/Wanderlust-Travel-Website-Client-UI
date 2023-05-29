@@ -10,7 +10,6 @@ interface PlaceProp {
 const Places: React.FC<PlaceProp> = (props) => {
     const { tours, loading } = props;
 
-    console.log(tours);
     return (
         <div className="places">
             {loading && !tours.data ? (
@@ -34,7 +33,15 @@ const Places: React.FC<PlaceProp> = (props) => {
                 </div>
             ) : (
                 tours?.data?.map((tour: any) => (
-                    <Place tour={tour.tour} tourDateCode={tour.tourDateCode} date={tour.date} id={tour.id} />
+                    <Place
+                        tour={tour.tour}
+                        tourDateCode={tour.tourDateCode}
+                        date={tour.date}
+                        id={tour.id}
+                        sellingPrice={
+                            tour.tourDateCostStatementTable.sellingPrice
+                        }
+                    />
                 ))
             )}
         </div>

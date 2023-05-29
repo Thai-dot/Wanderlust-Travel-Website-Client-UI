@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axiosClientInstance from '../service/axios/axiosClient/axiosClient';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import Error from '../components/Error/Error';
 import Images from '../components/DescriptionHotel/Images';
@@ -8,19 +8,49 @@ import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import exampleImage from '../assets/images/California.jpg';
 import { useQuery } from 'react-query';
 import DescriptionQuotation from '../components/Quotation/DescriptionQuotation';
+import { decodeToken, isTokenExpired } from '../utils/jwtFunction';
+import { getCookie } from '../utils/cookies';
 
 function CustomerQuotation() {
     const { id } = useParams();
+    const token = getCookie('accessToken');
+    const nav = useNavigate();
 
-    const fetchTour = () => {
-        return axiosClientInstance
-            .get(`/api/quotations/${id}`)
-            .then((res) => res.data);
+    if (!token || isTokenExpired(token ?? '')) {
+        nav('/login');
+    }
+
+    const decodedToken = decodeToken(token ?? '');
+
+    const [tour, setTour] = useState<any>(null);
+    const [pricePerPerson, setPricePerPerson] = useState(0);
+
+    const fetchQuotation = () => {
+        return axiosClientInstance.get(`/api/quotations/${id}`).then((res) => {
+            axiosClientInstance
+                .get(`/api/tours/${res.data.tourId}`)
+                .then((tourRes: any) => {
+                    setTour(tourRes.data);
+                });
+
+            axiosClientInstance
+                .get(`/api/costStatementTables/tour/${res.data.tourId}`)
+                .then((costStatementRes) =>
+                    setPricePerPerson(
+                        costStatementRes.data.data[0].sellingPrice
+                    )
+                );
+
+            if (decodedToken.email !== res.data.customer.email) {
+                window.location.href = '/';
+            }
+            return res.data;
+        });
     };
 
     const { isLoading, error, data, refetch } = useQuery(
         'getTourDateDetailClient',
-        fetchTour
+        fetchQuotation
     );
 
     if (isLoading) {
@@ -31,20 +61,22 @@ function CustomerQuotation() {
 
     return (
         <main className="main-page">
-            {data ? (
+            {!tour && <div className="red fs-tiny">Tour not found!</div>}
+            {data && tour ? (
                 <>
                     <div className="description-room">
                         <h2>
                             [{data?.quotationCode}] {data?.quotationName ?? ''}
                         </h2>
                     </div>
-                    <Images image={data?.tour.tourImage || exampleImage} />
+                    <Images image={tour.tourImage || exampleImage} />
                     <DescriptionQuotation
-                        tourData={data.tour}
+                        tourData={tour}
                         departureDate={data.startDate}
                         noOfPax={data.noOfPax}
                         noOfChild={data.noOfChild}
-                        pricePerPerson={data.totalPrice}
+                        pricePerPerson={pricePerPerson}
+                        currentStatus={data.status}
                     />
                 </>
             ) : (

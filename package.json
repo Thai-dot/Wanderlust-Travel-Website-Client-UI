@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^36.0.1",
+    "@ckeditor/ckeditor5-core": "^36.0.1",
+    "@ckeditor/ckeditor5-react": "^5.1.0",
+    "@ckeditor/ckeditor5-utils": "^36.0.1",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
@@ -63,6 +67,7 @@
     ]
   },
   "devDependencies": {
+     "@types/ckeditor__ckeditor5-build-classic": "^29.0.1",
     "prettier": "2.8.8"
   }
 }

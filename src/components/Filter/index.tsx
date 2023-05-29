@@ -30,7 +30,7 @@ const Filter = () => {
             .get('/api/customers/tourDates', {
                 params: {
                     Page: page,
-                    PageSize: 12
+                    PageSize: 9
                 }
             })
             .then((res) => res.data);
@@ -112,6 +112,7 @@ const Filter = () => {
             }
         }
     };
+
 
     if (isLoading) return <CircularProgress />;
     if (error) return <Error error={error} />;

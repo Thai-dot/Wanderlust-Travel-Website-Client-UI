@@ -45,6 +45,7 @@ const App = () => {
                 <NavBar />
                 <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/home" element={<HomePage />} />
                     <Route
                         path="/hotel/:id"
                         element={<HotelDescription />}
@@ -54,9 +55,12 @@ const App = () => {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/filter" element={<FilterPage />} />
                     <Route path="/become-expert" element={<BecomeExpert />} />
-                    <Route path="/tour/:id/booking-information" element={ <BookingInformation />} />
-                    <Route path="my-quotations/:id" element={<CustomerQuotation />} />
-                    <Route path="/" element={<PrivateRoute />}> 
+                    <Route
+                        path="/tour/:id/booking-information"
+                        element={<BookingInformation />}
+                    />
+
+                    <Route path="/" element={<PrivateRoute />}>
                         <Route
                             path="/checkout/:id"
                             element={<CheckoutPage />}
@@ -67,7 +71,10 @@ const App = () => {
                         />
                         <Route path="/user-setting" element={<UserPage />} />
                         <Route path="/wish-list" element={<WishListPage />} />
-                        <Route path="my-quotations/:id" element={<CustomerQuotation />} />
+                        <Route
+                            path="/my-quotations/:id"
+                            element={<CustomerQuotation />}
+                        />
                     </Route>
 
                     <Route path="/location/:id" element={<LocationPage />} />
