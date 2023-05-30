@@ -5,11 +5,14 @@ import FormLabel from '@mui/material/FormLabel/FormLabel';
 import Radio from '@mui/material/Radio/Radio';
 import RadioGroup from '@mui/material/RadioGroup/RadioGroup';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import React from 'react';
+import React, { useState } from 'react';
+import moment from 'moment';
 
 interface PaymentInformationType {
     paymentOption: string;
     handleOnChange: any;
+    handlePayment: any;
+    error: string;
 }
 
 const THEME = createTheme({
@@ -20,15 +23,23 @@ const THEME = createTheme({
 });
 
 function PaymentInformation(props: PaymentInformationType) {
-    const { paymentOption, handleOnChange } = props;
+    const { paymentOption, handleOnChange, handlePayment, error } = props;
     const tourName = sessionStorage.getItem('tourName');
     const departureDate = sessionStorage.getItem('departureDate');
     const noOfPax = sessionStorage.getItem('noOfPax');
     const noOfChild = sessionStorage.getItem('noOfChild');
     const totalPrice = Number(sessionStorage.getItem('totalPrice'));
 
+    const startDate = moment(departureDate);
+    const currentDate = moment();
+
+    const isGreaterThan3Days = startDate.isAfter(
+        currentDate.add(3, 'days'),
+        'day'
+    );
+
     return (
-        <div className="payment-info">
+        <div className="payment-info mt-20">
             <h3 style={{ textAlign: 'center', marginBottom: '20px' }}>
                 Thông tin thanh toán
             </h3>
@@ -85,17 +96,20 @@ function PaymentInformation(props: PaymentInformationType) {
                                 handleOnChange(e);
                             }}
                         >
-                            <FormControlLabel
-                                value="partialPayment"
-                                control={<Radio />}
-                                label="Thanh toán 70% tổng tiền"
-                                sx={{
-                                    border: '1px solid #d7dce3',
-                                    borderRadius: '10px',
-                                    padding: '0 50px 0 0',
-                                    marginBottom: '10px'
-                                }}
-                            />
+                            {isGreaterThan3Days && (
+                                <FormControlLabel
+                                    value="partialPayment"
+                                    control={<Radio />}
+                                    label="Thanh toán 70% tổng tiền"
+                                    sx={{
+                                        border: '1px solid #d7dce3',
+                                        borderRadius: '10px',
+                                        padding: '0 50px 0 0',
+                                        marginBottom: '10px'
+                                    }}
+                                />
+                            )}
+
                             <FormControlLabel
                                 value="fullPayment"
                                 control={<Radio />}
@@ -113,9 +127,12 @@ function PaymentInformation(props: PaymentInformationType) {
                         className="payment-submit"
                         style={{ textAlign: 'right', padding: '20px 20px 0' }}
                     >
-                        <Button variant="contained">Thanh toán</Button>
+                        <Button variant="contained" onClick={handlePayment}>
+                            Thanh toán
+                        </Button>
                     </div>
                 </ThemeProvider>
+                {error ?? <div style={{ color: 'red' }}>{error}</div>}
             </div>
         </div>
     );

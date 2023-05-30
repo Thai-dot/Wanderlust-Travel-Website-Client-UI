@@ -6,8 +6,8 @@ const Footer = () => {
         <footer className="footer">
             <div className="footer-content">
                 <div className="footer-section">
-                    <h4>Wanderlust VN</h4>
-                    <p>Email: wanderlust5231@gmail.com</p>
+                    <h4>TravelEase VN</h4>
+                    <p>Email: travelease5231@gmail.com</p>
                     <p>Phone: 0919520565</p>
                 </div>
                 <div className="footer-section">
@@ -23,9 +23,7 @@ const Footer = () => {
                             <a href="/filter">Tour List</a>
                         </li>
                         <li>
-                            <a href="/personal-information">
-                                Personal Information
-                            </a>
+                            <a href="/user-setting">Personal Information</a>
                         </li>
                     </ul>
                 </div>

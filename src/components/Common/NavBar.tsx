@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { AiOutlineShoppingCart, AiOutlineUser } from 'react-icons/ai';
 import { BiChevronDown } from 'react-icons/bi';
-import { NavLink } from 'react-router-dom';
-import Logo from '../../assets/images/logoTravel.png';
+import { NavLink, Link } from 'react-router-dom';
+import Logo from '../../assets/images/TravelEase.svg';
 import California from '../../assets/images/California.jpg';
 import authFirebase from '../../service/firebase/SignInWithProvider/getAuth';
 import { getCookie, removeCookie, setCookie } from '../../utils/cookies';
@@ -74,31 +74,11 @@ const NavBar = () => {
             </div>
             <div className="actions">
                 <div className="dropdown">
-                    <div className="action dropdown__button">
-                        <AiOutlineShoppingCart />
-                    </div>
-                    <div className="dropdown__menu dropdown__room">
-                        <h3>Your cart</h3>
-                        <div className="room">
-                            <div className="order">
-                                <div className="room__image">
-                                    <img src={California} alt="place" />
-                                </div>
-                                <div className="room__description">
-                                    <h6>Standard Double Room</h6>
-                                    <p>
-                                        Price: <span>$160</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="room__price">
-                                Subtotal <span>$160</span>
-                            </div>
-                            <NavLink to={'/checkout/1'}>
-                                <button className="room__btn">Pay Now</button>
-                            </NavLink>
+                    <Link to="/customer/booking-list">
+                        <div className="action dropdown__button">
+                            <AiOutlineShoppingCart />
                         </div>
-                    </div>
+                    </Link>
                 </div>
                 <div className="dropdown">
                     <div className="action dropdown__button">

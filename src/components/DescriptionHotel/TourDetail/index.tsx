@@ -12,10 +12,19 @@ interface DescriptionTourProp {
     tourPrice: number;
     tourDateCode: string;
     departureDate: string;
+    noOfPax: number;
+    tourDateID:number;
 }
 
 const DescriptionTour = (props: DescriptionTourProp) => {
-    const { tourData, tourPrice, tourDateCode, departureDate } = props;
+    const {
+        tourData,
+        tourPrice,
+        tourDateCode,
+        departureDate,
+        noOfPax,
+        tourDateID
+    } = props;
 
     return (
         <Fragment>
@@ -43,6 +52,8 @@ const DescriptionTour = (props: DescriptionTourProp) => {
                         tourPrice={tourPrice}
                         tourDateCode={tourDateCode}
                         departureDate={departureDate}
+                        noOfPax={noOfPax}
+                        tourDateID={tourDateID}
                     />
                 </div>
             </div>

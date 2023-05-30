@@ -4,20 +4,28 @@ import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React, { useState } from 'react';
 import { NavLink, useParams, useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../../app/hooks';
 
 interface BookingRoomType {
     tourData: any;
     tourPrice: number;
     tourDateCode: string;
     departureDate: string;
+    noOfPax: number;
+    tourDateID: number;
 }
 
 const BookingRoom = (props: BookingRoomType) => {
-    const { tourData, tourPrice, tourDateCode, departureDate } = props;
-    console.log(tourData, tourDateCode, departureDate);
+    const {
+        tourData,
+        tourPrice,
+        tourDateCode,
+        departureDate,
+        noOfPax,
+        tourDateID
+    } = props;
+
     const params = useParams();
-    // const room = useAppSelector((state) => state.room);
+
     const [dateRange, setDateRange] = useState<{
         startDate: Date | null;
         endDate: Date | null;
@@ -34,62 +42,6 @@ const BookingRoom = (props: BookingRoomType) => {
 
     const [totalPrice, setTotalPrice] = useState(tourPrice);
     const navigate = useNavigate();
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { name, value } = e.target;
-    //     if (name === 'adults') {
-    //         if (+value < 1) {
-    //             setCustomerQuantity({
-    //                 ...customerQuantity,
-    //                 [name]: 1
-    //             });
-    //             return;
-    //         }
-    //         setCustomerQuantity({
-    //             ...customerQuantity,
-    //             [e.target.name]:
-    //                 +value >
-    //                 (room.room?.maxAdults === undefined
-    //                     ? 1
-    //                     : room.room.maxAdults)
-    //                     ? room.room?.maxAdults
-    //                     : value
-    //         });
-    //     } else if (name === 'rooms') {
-    //         if (+value < 1) {
-    //             setCustomerQuantity({
-    //                 ...customerQuantity,
-    //                 [name]: 1
-    //             });
-    //             return;
-    //         }
-    //         setCustomerQuantity({
-    //             ...customerQuantity,
-    //             [e.target.name]:
-    //                 +value >
-    //                 (room.room?.beds === undefined ? 1 : room.room.beds)
-    //                     ? room.room?.beds
-    //                     : value
-    //         });
-    //     } else {
-    //         if (+value < 0) {
-    //             setCustomerQuantity({
-    //                 ...customerQuantity,
-    //                 [name]: 0
-    //             });
-    //             return;
-    //         }
-    //         setCustomerQuantity({
-    //             ...customerQuantity,
-    //             [e.target.name]:
-    //                 +e.target.value >
-    //                 (room.room?.maxChildren === undefined
-    //                     ? 0
-    //                     : room.room.maxChildren)
-    //                     ? room.room?.maxChildren
-    //                     : e.target.value
-    //         });
-    //     }
-    // };
 
     const handleChange = (event: any) => {
         const nameOfInput = event.target.name;
@@ -118,8 +70,15 @@ const BookingRoom = (props: BookingRoomType) => {
         );
         sessionStorage.setItem('totalPrice', totalPrice.toString());
 
+        sessionStorage.setItem('id', tourDateID.toString());
+
         navigate(`/tour/${params.id}/booking-information`);
     };
+
+    const passengersNum =
+        Number(customerQuantity.adults) + Number(customerQuantity.children);
+
+    console.log(passengersNum);
 
     return (
         <div className="booking__board">
@@ -131,7 +90,7 @@ const BookingRoom = (props: BookingRoomType) => {
                             <p className="emphasize">Ngày khởi hành</p>{' '}
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DesktopDatePicker
-                                    value={dateRange.startDate}
+                                    value={departureDate}
                                     minDate={new Date('2017-01-01')}
                                     onChange={(newValue) => {
                                         setDateRange({
@@ -139,6 +98,8 @@ const BookingRoom = (props: BookingRoomType) => {
                                             startDate: newValue
                                         });
                                     }}
+                                    disableOpenPicker
+                                    disabled
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -149,6 +110,14 @@ const BookingRoom = (props: BookingRoomType) => {
                                     )}
                                 />
                             </LocalizationProvider>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p className="emphasize">
+                                Khoảng khách{' '}
+                                <span className="emphasize">{noOfPax}</span>
+                            </p>{' '}
                         </td>
                     </tr>
                     <tr>
@@ -201,11 +170,18 @@ const BookingRoom = (props: BookingRoomType) => {
                     </tr>
                 </tbody>
             </table>
-            <div>
-                <button className="submit__btn" onClick={handleOnSubmit}>
-                    Đặt Tour
-                </button>
-            </div>
+
+            {passengersNum > Number(noOfPax) ? (
+                <div className="red">
+                    Không thể đặt tour vì số lượng khách lớn hơn khoảng khách
+                </div>
+            ) : (
+                <div>
+                    <button className="submit__btn" onClick={handleOnSubmit}>
+                        Đặt Tour
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

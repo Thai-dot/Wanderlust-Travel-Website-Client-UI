@@ -67,7 +67,7 @@
     ]
   },
   "devDependencies": {
-     "@types/ckeditor__ckeditor5-build-classic": "^29.0.1",
+    "@types/ckeditor__ckeditor5-build-classic": "^29.0.1",
     "prettier": "2.8.8"
   }
 }

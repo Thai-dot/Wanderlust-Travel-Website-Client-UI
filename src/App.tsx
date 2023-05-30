@@ -28,6 +28,8 @@ import NotFoundPage from './pages/NotFoundPage';
 import './styles/index.scss';
 import BookingInformation from './components/BookingInformation/BookingInformation';
 import CustomerQuotation from './pages/CustomerQuotation';
+import SuccessPaymentPage from './pages/SuccessPaymentPage';
+import CustomerBookingList from './pages/CustomerBookingList';
 
 const App = () => {
     const queryClient = new QueryClient({
@@ -55,10 +57,6 @@ const App = () => {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/filter" element={<FilterPage />} />
                     <Route path="/become-expert" element={<BecomeExpert />} />
-                    <Route
-                        path="/tour/:id/booking-information"
-                        element={<BookingInformation />}
-                    />
 
                     <Route path="/" element={<PrivateRoute />}>
                         <Route
@@ -70,10 +68,21 @@ const App = () => {
                             element={<CheckoutSuccessPage />}
                         />
                         <Route path="/user-setting" element={<UserPage />} />
-                        <Route path="/wish-list" element={<WishListPage />} />
                         <Route
                             path="/my-quotations/:id"
                             element={<CustomerQuotation />}
+                        />
+                        <Route
+                            path="/tour/:id/booking-information"
+                            element={<BookingInformation />}
+                        />
+                        <Route
+                            path="/tour/:id/success-payment"
+                            element={<SuccessPaymentPage />}
+                        />
+                        <Route
+                            path="/customer/booking-list"
+                            element={<CustomerBookingList />}
                         />
                     </Route>
 

@@ -25,6 +25,7 @@ function TouristForm(props: TouristFormType) {
                                 variant="outlined"
                                 value={tourist.fullName}
                                 fullWidth
+                                required
                                 onChange={(e : any) => {
                                     handleOnChange(e, index)
                                 }}
@@ -33,6 +34,7 @@ function TouristForm(props: TouristFormType) {
                                 id="outlined-basic"
                                 label="Email"
                                 name='email'
+                                type='email'
                                 variant="outlined"
                                 value={tourist.email}
                                 fullWidth

@@ -26,8 +26,6 @@ const TourDetail = () => {
         fetchTour
     );
 
-    console.log(data);
-
     if (isLoading) {
         return <Skeleton width={'100%'} height={'300px'} />;
     }
@@ -49,6 +47,8 @@ const TourDetail = () => {
                         tourPrice={data.tourDateCostStatementTable.sellingPrice}
                         tourDateCode={data.tourDateCode}
                         departureDate={data.date}
+                        noOfPax={data.tourDateCostStatementTable.noOfPax}
+                        tourDateID={Number(id) ?? 0}
                     />
                 </>
             ) : (

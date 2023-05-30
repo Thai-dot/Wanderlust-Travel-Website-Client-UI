@@ -14,7 +14,9 @@ function PrivateRoute() {
     const currentToken = getCookie('accessToken') ?? '';
     const currentID = getCookie('id') ?? '';
 
-    
+    if (!currentID || isTokenExpired(currentToken)) {
+        window.location.href = '/login';
+    }
 
     useEffect(() => {
         const handleBeforeUnload = () => {
