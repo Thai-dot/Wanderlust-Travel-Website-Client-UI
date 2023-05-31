@@ -1,8 +1,13 @@
 import axios from 'axios';
 import { getCookie } from '../../../utils/cookies';
 
+
+const backend_host = process.env.REACT_APP_BACKEND_HOST;
+
+console.log(backend_host);
+
 const axiosClientInstance = axios.create({
-    baseURL: 'https://localhost:7210',
+    baseURL: backend_host,
     headers: {
         'Content-Type': 'application/json'
     }

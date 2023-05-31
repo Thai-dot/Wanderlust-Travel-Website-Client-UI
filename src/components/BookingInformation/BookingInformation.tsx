@@ -152,7 +152,7 @@ function BookingInformation() {
                                                     : Math.round(
                                                           totalPrice * 0.7
                                                       ),
-                                            returnUrl: `http://localhost:3000/tour/${tourDateId}/success-payment`
+                                            returnUrl: `/tour/${tourDateId}/success-payment`
                                         }
                                     )
                                     .then((paymentRes: any) => {

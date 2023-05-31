@@ -73,7 +73,7 @@ export default function CustomerBookingList() {
                         .post(`/api/Payment/get-vnpay-payment-url`, {
                             receipId: receiptRes.data.id,
                             totalAmount: Math.round(price * 0.7),
-                            returnUrl: `http://localhost:3000/tour/0/success-payment`
+                            returnUrl: `${process.env.REACT_APP_BASE}/tour/0/success-payment`
                         })
                         .then((paymentRes: any) => {
                             window.location.href = paymentRes.data;
@@ -100,7 +100,7 @@ export default function CustomerBookingList() {
                                     ? Math.round(price)
                                     : Math.round(price) -
                                       Math.round(price * 0.7),
-                            returnUrl: `http://localhost:3000/tour/0/success-payment`
+                            returnUrl: `${process.env.REACT_APP_BASE}/tour/0/success-payment`
                         })
                         .then((paymentRes: any) => {
                             window.location.href = paymentRes.data;
