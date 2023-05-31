@@ -23,7 +23,7 @@ const About = () => {
             <p>
                 Đội ngũ chuyên gia du lịch giàu kinh nghiệm của chúng tôi cam
                 kết đảm bảo chuyến đi của bạn diễn ra trơn tru và không gặp rắc
-                rối. Chúng tôi hiểu rằng mỗi du khách đều là độc nhất vô nhị, và
+                rối. Chúng tôi hiểu rằng mỗi du khách đều là người đặc biệt, và
                 chúng tôi nỗ lực cung cấp sự hỗ trợ và gợi ý cá nhân để chuyến
                 đi của bạn thực sự đáng nhớ.
             </p>

@@ -64,7 +64,6 @@ const Filter = () => {
             .then((res) => res.data);
     };
 
-    console.log(filter);
 
     const { isLoading, error, data, refetch } = useQuery(
         'getTourDateClient',
@@ -135,6 +134,7 @@ const Filter = () => {
                             label="Ngày bắt đầu"
                             value={filter.startDate}
                             minDate={moment().format('L')}
+                            disablePast
                             onChange={(newValue: any) =>
                                 setFilter({ ...filter, startDate: newValue })
                             }
@@ -149,7 +149,7 @@ const Filter = () => {
                             <DatePicker
                                 label="Ngày Kết thúc"
                                 value={filter.endDate}
-                                
+                                disablePast
                                 onChange={(newValue: any) =>
                                     setFilter({
                                         ...filter,
