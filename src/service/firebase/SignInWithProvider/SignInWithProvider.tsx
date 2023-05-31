@@ -25,7 +25,7 @@ const SignInWithProvider = () => {
             .then(async (res: any) => {
                 await axios
                     .post(
-                        'https://localhost:7210/api/customers/login-by-providers',
+                        `${process.env.REACT_APP_BACKEND_HOST}/api/customers/login-by-providers`,
                         {
                             username: res.user.email,
                             idToken: res.user.accessToken
@@ -50,7 +50,7 @@ const SignInWithProvider = () => {
                 console.log(res);
                 await axios
                     .post(
-                        'https://localhost:7210/api/customers/login-by-providers',
+                        `${process.env.REACT_APP_BACKEND_HOST}/api/customers/login-by-providers`,
                         {
                             username: res.user.email,
                             idToken: res.user.accessToken
