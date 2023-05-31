@@ -11,7 +11,7 @@ const Footer = () => {
                     <p>Phone: 0919520565</p>
                 </div>
                 <div className="footer-section">
-                    <h4>Navigate</h4>
+                    <h4>Đường dẫn</h4>
                     <ul>
                         <li>
                             <a href="/">Home</a>
@@ -20,10 +20,10 @@ const Footer = () => {
                             <a href="/about">About</a>
                         </li>
                         <li>
-                            <a href="/filter">Tour List</a>
+                            <a href="/filter">Danh sách tour</a>
                         </li>
                         <li>
-                            <a href="/user-setting">Personal Information</a>
+                            <a href="/user-setting">Thông tin cá nhân</a>
                         </li>
                     </ul>
                 </div>

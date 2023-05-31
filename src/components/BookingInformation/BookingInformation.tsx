@@ -102,7 +102,7 @@ function BookingInformation() {
                         bookingName: `${tourName} ${departureDate} ${customerData?.fullName}`,
                         noOfPax,
                         noOfChild,
-                        totalPrice,
+                        totalPrice: Math.round(totalPrice),
                         discount: 0,
                         customerId: customerData?.id,
                         tourDateId
@@ -134,8 +134,8 @@ function BookingInformation() {
                                 collectedDate: new Date(),
                                 amountOfMoney:
                                     paymentOption === 'fullPayment'
-                                        ? totalPrice
-                                        : totalPrice * 0.7,
+                                        ? Math.round(totalPrice)
+                                        : Math.round(totalPrice * 0.7),
                                 paymentMethod: 1,
                                 content: '',
                                 bookingId: bookingRes.data.id
@@ -148,10 +148,11 @@ function BookingInformation() {
                                             receipId: receiptRes.data.id,
                                             totalAmount:
                                                 paymentOption === 'fullPayment'
-                                                    ? totalPrice
-                                                    : totalPrice * 0.7,
-                                            returnUrl: `http://localhost:3000/tour/${tourDateId}/success-payment`,
-                                            receivedEmail: decodedToken.email
+                                                    ? Math.round(totalPrice)
+                                                    : Math.round(
+                                                          totalPrice * 0.7
+                                                      ),
+                                            returnUrl: `http://localhost:3000/tour/${tourDateId}/success-payment`
                                         }
                                     )
                                     .then((paymentRes: any) => {

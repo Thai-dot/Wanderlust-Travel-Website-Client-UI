@@ -7,13 +7,12 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import dayjs, { Dayjs } from 'dayjs';
+
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { CalendarToday } from '@mui/icons-material';
 
-import moment from 'moment';
+
 import React, { useEffect, useState, FormEventHandler } from 'react';
 import UserInput from './UserInput';
 import axiosClientInstance from '../../service/axios/axiosClient/axiosClient';
@@ -118,14 +117,14 @@ const User = () => {
     return (
         <div className="user">
             <form className="personal-info" onSubmit={handleSubmit}>
-                <h5>Personal Information</h5>
+                <h5>Thông tin cá nhân</h5>
                 <Grid container columnSpacing={2} spacing={2} sx={{ mt: 2 }}>
                     <Grid item xs={6} md={4}>
                         <TextField
                             name="fullName"
-                            title="Full Name"
+                            title="Họ và tên"
                             type="text"
-                            label="Full Name"
+                            label="Họ và tên"
                             fullWidth
                             error={validate.stringRequiredValidate(
                                 user.fullName,
@@ -143,13 +142,13 @@ const User = () => {
                     <Grid item xs={6} md={4}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">
-                                Gender
+                                Giới tính
                             </InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={user.gender}
-                                label="Gender"
+                                label="Giới tính"
                                 name="gender"
                                 onChange={handleChange}
                             >
@@ -172,7 +171,7 @@ const User = () => {
                     </Grid>
                     <Grid item xs={6} md={4}>
                         <FormControl fullWidth>
-                            <InputLabel id="province">Province/City</InputLabel>
+                            <InputLabel id="province">Tỉnh/thành</InputLabel>
                             <Select
                                 labelId="label-province"
                                 id="label-province"
@@ -191,7 +190,7 @@ const User = () => {
                     </Grid>
                     <Grid item xs={6} md={4}>
                         <FormControl fullWidth>
-                            <InputLabel id="district">District</InputLabel>
+                            <InputLabel id="district">Quận/huyện</InputLabel>
                             <Select
                                 labelId="label-district"
                                 id="label-district"
@@ -213,7 +212,7 @@ const User = () => {
                     </Grid>
                     <Grid item xs={6} md={4}>
                         <FormControl fullWidth>
-                            <InputLabel id="ward">Ward</InputLabel>
+                            <InputLabel id="ward">Phường/Xã</InputLabel>
                             <Select
                                 labelId="label-ward"
                                 id="label-ward"
@@ -236,9 +235,9 @@ const User = () => {
                     <Grid item xs={6} md={4}>
                         <TextField
                             name="address"
-                            title="Address"
+                            title="Địa chỉ"
                             type="text"
-                            label="Address"
+                            label="Địa chỉ"
                             fullWidth
                             value={user.address}
                             onChange={handleChange}
@@ -247,9 +246,9 @@ const User = () => {
                     <Grid item xs={6} md={4}>
                         <TextField
                             name="phoneNumber"
-                            title="Phone Number"
+                            title="Số điện thoại"
                             type="text"
-                            label="Phone Number"
+                            label="Số điện thoại"
                             fullWidth
                             value={user.phoneNumber}
                             onChange={handleChange}
@@ -258,7 +257,7 @@ const User = () => {
                     <Grid item xs={6} md={4}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                                label="Birthday"
+                                label="Ngày sinh"
                                 value={user.dateOfBirth}
                                 onChange={(newValue: any) =>
                                     setUser({ ...user, dateOfBirth: newValue })
@@ -301,36 +300,9 @@ const User = () => {
                     {addLoading ? (
                         <CircularProgress color="inherit" size={'16px'} />
                     ) : (
-                        'Save Changes'
+                        'Cập nhật'
                     )}
                 </button>
-            </form>
-            <form className="account-info">
-                <h5>Change Password</h5>
-                <div className="group-input">
-                    <UserInput
-                        name="currentPassword"
-                        title="Current Password"
-                        type="text"
-                        required={true}
-                        handleChange={handleChange}
-                    />
-                    <UserInput
-                        name="newPassword"
-                        title="New Password"
-                        type="text"
-                        required={true}
-                        handleChange={handleChange}
-                    />
-                    <UserInput
-                        name="newPasswordAgain"
-                        title="New Password Again"
-                        type="text"
-                        required={true}
-                        handleChange={handleChange}
-                    />
-                </div>
-                <button className="submit-btn">Change Password</button>
             </form>
         </div>
     );

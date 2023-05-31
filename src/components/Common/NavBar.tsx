@@ -14,8 +14,6 @@ const NavBar = () => {
 
     const isExpired = isTokenExpired(token);
 
-    
-
     const handleLogout = () => {
         authFirebase
             .signOut()
@@ -52,23 +50,20 @@ const NavBar = () => {
                 />
             </NavLink>
             <div className="section">
-                <div className="dropdown">
-                    <button className="dropdown__button">
-                        Home <BiChevronDown />
-                    </button>
-                    <div className="dropdown__menu">
-                        <a href="/" className="link">
-                            Home
-                        </a>
-                    </div>
+                <div>
+                    <Link to="/home">
+                        <button className="dropdown__button">Home</button>
+                    </Link>
                 </div>
                 <div className="dropdown">
-                    <button className="dropdown__button">About</button>
+                    <Link to="/about">
+                        <button className="dropdown__button">About</button>
+                    </Link>
                     {/* <div className="dropdown__menu"></div> */}
                 </div>
                 <div className="dropdown">
                     <NavLink to={'/filter'}>
-                        <button className="dropdown__button">Listing</button>
+                        <button className="dropdown__button">Danh sách tour</button>
                     </NavLink>
                 </div>
             </div>
@@ -106,17 +101,17 @@ const NavBar = () => {
                             >
                                 <a href="/user-setting">
                                     <button type="button" className="link">
-                                        User Setting
+                                        Thông tin cá nhân
                                     </button>
                                 </a>
 
                                 <button className="link" onClick={handleLogout}>
-                                    Log out
+                                    Đăng Xuất
                                 </button>
                             </div>
                         ) : (
                             <a href="/login" className="link">
-                                Login
+                                Đăng nhập
                             </a>
                         )}
                     </div>

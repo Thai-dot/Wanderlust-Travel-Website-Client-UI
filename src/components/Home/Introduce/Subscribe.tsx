@@ -8,8 +8,8 @@ const Subscribe = () => {
         <img src={SubscribeImage} alt="subscribe" />
       </div>
       <div className="subscribe__input">
-        <h3>Get special offers, and more from Traveler</h3>
-        <p>Subscribe to see secret deals prices drop the moment you sign up!</p>
+        <h3>Nhận offer từ Travel Ease</h3>
+        <p>Thêm email của bạn vào đây!</p>
         <div className="subscribe__form">
           <input
             type="text"
@@ -18,7 +18,7 @@ const Subscribe = () => {
             placeholder="Email Address"
           />
           <button type="button" className="btn-submit">
-            Subscribe
+            Đăng ký
           </button>
         </div>
       </div>

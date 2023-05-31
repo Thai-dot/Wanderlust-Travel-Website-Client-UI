@@ -1,12 +1,19 @@
 import { CircularProgress, Slider } from '@mui/material';
 import { useQuery } from 'react-query';
 import React, { useEffect, useState } from 'react';
-import { AiFillStar } from 'react-icons/ai';
 import Pagination from '@mui/material/Pagination';
 import Places from '../Home/Introduce/Places';
+import TextField from '@mui/material/TextField/TextField';
+
+import { createTheme, ThemeProvider } from '@mui/material';
+
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import axiosClientInstance from '../../service/axios/axiosClient/axiosClient';
 import Error from '../Error/Error';
+import moment from 'moment';
 
 function valuetext(value: number) {
     return `${value}°C`;
@@ -16,25 +23,48 @@ const minDistance = 0;
 
 const Filter = () => {
     const [filterTours, setFilterTours] = useState<any>([]);
-    const [filter, setFilter] = useState({
-        minPrice: 0,
-        maxPrice: 300,
-        reviewScore: [],
-        star: [],
-        facilities: [],
-        hotelThemes: []
+
+    const theme = createTheme({
+        components: {
+            MuiTextField: {
+                styleOverrides: {
+                    root: {
+                        '&.Mui-error .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline':
+                            {
+                                borderColor: 'gray'
+                            }
+                    }
+                }
+            }
+        }
     });
+
     const [page, setPage] = React.useState(1);
+
+    const [filter, setFilter] = useState<any>({
+        minPrice: 0,
+        maxPrice: 500000000,
+        startDate: moment().format('L'),
+        endDate: ''
+    });
+
     const fetchTour = () => {
         return axiosClientInstance
             .get('/api/customers/tourDates', {
                 params: {
                     Page: page,
-                    PageSize: 9
+                    PageSize: 9,
+                    Filters: `date>${moment().format('L')},date<=${
+                        filter.endDate === ''
+                            ? ''
+                            : moment(filter.endDate.$d).format('L')
+                    }`
                 }
             })
             .then((res) => res.data);
     };
+
+    console.log(filter);
 
     const { isLoading, error, data, refetch } = useQuery(
         'getTourDateClient',
@@ -56,10 +86,6 @@ const Filter = () => {
     }, [page]);
 
     useEffect(() => {
-        handleFilter();
-    }, []);
-
-    useEffect(() => {
         if (data) {
             setFilterTours(data);
         }
@@ -69,50 +95,11 @@ const Filter = () => {
         event: Event,
         newValue: number | number[],
         activeThumb: number
-    ) => {
-        if (!Array.isArray(newValue)) {
-            return;
-        }
+    ) => {};
 
-        if (activeThumb === 0) {
-            setFilter({
-                ...filter,
-                minPrice: Math.min(newValue[0], filter.maxPrice - minDistance)
-            });
-        } else {
-            setFilter({
-                ...filter,
-                maxPrice: Math.max(newValue[1], filter.minPrice + minDistance)
-            });
-        }
+    const handleFilter = () => {
+        refetch();
     };
-
-    const handleFilter = () => {};
-
-    const handleCheckbox = (
-        e: React.MouseEvent<HTMLInputElement, MouseEvent>
-    ) => {
-        if (e.currentTarget.name === 'reviewScore') {
-            if (e.currentTarget.checked) {
-                console.log(e.currentTarget.value);
-                setFilter({
-                    ...filter,
-                    reviewScore: [
-                        ...filter.reviewScore,
-                        e.currentTarget.value as never
-                    ]
-                });
-            } else {
-                setFilter({
-                    ...filter,
-                    reviewScore: filter.reviewScore.filter(
-                        (item) => item !== e.currentTarget.value
-                    )
-                });
-            }
-        }
-    };
-
 
     if (isLoading) return <CircularProgress />;
     if (error) return <Error error={error} />;
@@ -120,161 +107,69 @@ const Filter = () => {
         <div className="filter">
             <div className="filter__board">
                 <div className="filter__item">
-                    <h4 className="filter__name">Filter Price</h4>
+                    <h4 className="filter__name">Tìm kiếm theo giá</h4>
                     <Slider
                         getAriaLabel={() => 'Temperature range'}
                         value={[filter.minPrice, filter.maxPrice]}
                         onChange={handleChange}
                         valueLabelDisplay="auto"
                         getAriaValueText={valuetext}
-                        max={300}
+                        max={500000000}
                     />
                     <div className="items">
                         <div className="item">
-                            <p>Min price</p>
-                            <span>{filter.minPrice}$</span>
+                            <p>Giá thấp nhất</p>
+                            <span>{filter.minPrice}vnd</span>
                         </div>
                         <div className="item">
-                            <p>Max price</p>
-                            <span>{filter.maxPrice}$</span>
+                            <p>Giá cao nhất</p>
+                            <span>{filter.maxPrice}vnd</span>
                         </div>
                     </div>
                 </div>
                 <div className="filter__item">
-                    <h4 className="filter__name">Review Score</h4>
-                    <div className="filter__item__checkbox">
-                        <div className="input">
-                            <input
-                                type="checkbox"
-                                name="reviewScore"
-                                onClick={handleCheckbox}
-                                value={'5'}
-                            />{' '}
-                            Excellent
-                        </div>
-                        <div className="input">
-                            <input
-                                type="checkbox"
-                                name="reviewScore"
-                                onClick={handleCheckbox}
-                                value={'4'}
-                            />{' '}
-                            Good
-                        </div>
-                        <div className="input">
-                            <input
-                                type="checkbox"
-                                name="reviewScore"
-                                onClick={handleCheckbox}
-                                value={'3'}
-                            />{' '}
-                            Medium
-                        </div>
-                        <div className="input">
-                            <input
-                                type="checkbox"
-                                name="reviewScore"
-                                onClick={handleCheckbox}
-                                value={'2'}
-                            />{' '}
-                            Bad
-                        </div>
-                        <div className="input">
-                            <input
-                                type="checkbox"
-                                name="reviewScore"
-                                onClick={handleCheckbox}
-                                value={'1'}
-                            />{' '}
-                            Terrible
-                        </div>
+                    <h4 className="filter__name">Tìm kiếm theo ngày</h4>
+
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            label="Ngày bắt đầu"
+                            value={filter.startDate}
+                            minDate={moment().format('L')}
+                            onChange={(newValue: any) =>
+                                setFilter({ ...filter, startDate: newValue })
+                            }
+                            renderInput={(params) => (
+                                <TextField {...params} fullWidth />
+                            )}
+                        />
+                    </LocalizationProvider>
+
+                    <div className="mt-20">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                label="Ngày Kết thúc"
+                                value={filter.endDate}
+                                
+                                onChange={(newValue: any) =>
+                                    setFilter({
+                                        ...filter,
+                                        endDate: newValue
+                                    })
+                                }
+                                renderInput={(params) => (
+                                    <ThemeProvider theme={theme}>
+                                        <TextField
+                                            {...params}
+                                            sx={{ borderColor: 'gray' }}
+                                            fullWidth
+                                        />
+                                    </ThemeProvider>
+                                )}
+                            />
+                        </LocalizationProvider>
                     </div>
                 </div>
-                <div className="filter__item">
-                    <h4 className="filter__name">Hotel Star</h4>
-                    <div className="filter__item__checkbox">
-                        <div className="input">
-                            <input type="checkbox" />
-                            <div className="star">
-                                <AiFillStar />
-                                <AiFillStar />
-                                <AiFillStar />
-                                <AiFillStar />
-                                <AiFillStar />
-                            </div>
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" />
-                            <div className="star">
-                                <AiFillStar />
-                                <AiFillStar />
-                                <AiFillStar />
-                                <AiFillStar />
-                            </div>
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" />
-                            <div className="star">
-                                <AiFillStar />
-                                <AiFillStar />
-                                <AiFillStar />
-                            </div>
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" />
-                            <div className="star">
-                                <AiFillStar />
-                                <AiFillStar />
-                            </div>
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" />
-                            <div className="star">
-                                <AiFillStar />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="filter__item">
-                    <h4 className="filter__name">Facilities</h4>
-                    <div className="filter__item__checkbox">
-                        <div className="input">
-                            <input type="checkbox" /> Air Conditioning
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" /> Airport Transport
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" /> Fitness Center
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" /> Flat TV
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" /> Internet - Wifi
-                        </div>
-                    </div>
-                </div>
-                <div className="filter__item">
-                    <h4 className="filter__name">Hotel Themes</h4>
-                    <div className="filter__item__checkbox">
-                        <div className="input">
-                            <input type="checkbox" /> Air Conditioning
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" /> Airport Transport
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" /> Fitness Center
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" /> Flat TV
-                        </div>
-                        <div className="input">
-                            <input type="checkbox" /> Internet - Wifi
-                        </div>
-                    </div>
-                </div>
+
                 <button className="button__submit" onClick={handleFilter}>
                     Filter
                 </button>
@@ -283,7 +178,7 @@ const Filter = () => {
                 {data && (
                     <>
                         <div className="number">
-                            <span>{data?.totalRecords}</span> tour(s) found
+                            <span>{data?.totalRecords}</span> được tìm thấy
                         </div>
                         <Places tours={filterTours} loading={isLoading} />
                         <div

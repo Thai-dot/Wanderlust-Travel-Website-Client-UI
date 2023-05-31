@@ -8,9 +8,9 @@ const HomePage = () => {
     <main className="main-page">
       <Banner name="home" />
       <Discount />
-      <Introduce name="Top destinations" />
-      <Introduce name="Plan your next staycation" />
-      <Introduce name="Recommend for you" />
+      <Introduce name="Top tour" />
+      <Introduce name="Tìm tour mà bạn yêu thích" />
+      <Introduce name="Recommend cho bạn" />
       <Subscribe />
     </main>
   );
