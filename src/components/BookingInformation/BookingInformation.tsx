@@ -152,7 +152,7 @@ function BookingInformation() {
                                                     : Math.round(
                                                           totalPrice * 0.7
                                                       ),
-                                            returnUrl: `/tour/${tourDateId}/success-payment`
+                                            returnUrl: `${process.env.REACT_APP_BASE}/tour/${tourDateId}/success-payment`
                                         }
                                     )
                                     .then((paymentRes: any) => {
