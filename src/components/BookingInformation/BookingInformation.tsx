@@ -99,7 +99,9 @@ function BookingInformation() {
             try {
                 axiosClientInstance
                     .post(`/api/booking/add`, {
-                        bookingName: `${tourName} ${departureDate} ${customerData?.fullName}`,
+                        bookingName: `${tourName} ${
+                            departureDate?.split('T')[0]
+                        } ${customerData?.fullName}`,
                         noOfPax,
                         noOfChild,
                         totalPrice: Math.round(totalPrice),
