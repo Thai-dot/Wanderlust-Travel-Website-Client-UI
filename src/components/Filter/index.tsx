@@ -64,7 +64,6 @@ const Filter = () => {
             .then((res) => res.data);
     };
 
-
     const { isLoading, error, data, refetch } = useQuery(
         'getTourDateClient',
         fetchTour,
@@ -162,6 +161,7 @@ const Filter = () => {
                                             {...params}
                                             sx={{ borderColor: 'gray' }}
                                             fullWidth
+                                            error={false}
                                         />
                                     </ThemeProvider>
                                 )}

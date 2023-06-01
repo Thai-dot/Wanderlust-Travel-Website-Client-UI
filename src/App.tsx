@@ -28,6 +28,7 @@ import CustomerQuotation from './pages/CustomerQuotation';
 import SuccessPaymentPage from './pages/SuccessPaymentPage';
 import CustomerBookingList from './pages/CustomerBookingList';
 import About from './pages/About';
+import ProviderQuotation from './pages/ProviderQuotation';
 
 
 
@@ -54,6 +55,7 @@ const App = () => {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/filter" element={<FilterPage />} />
+                    <Route path="/provider-quotation/:id" element={<ProviderQuotation />} />
 
                     <Route path="/" element={<PrivateRoute />}>
                         <Route path="/user-setting" element={<UserPage />} />

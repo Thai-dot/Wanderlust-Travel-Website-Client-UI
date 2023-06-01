@@ -1,0 +1,19 @@
+.quotation {
+    &-banner {
+        background-image: linear-gradient(
+            to right,
+            hsl(268.14deg 96.58% 77.06%),
+            rgb(100 82 254)
+        );
+        height: 60vh;
+    }
+    &-form{
+        width: 70%;
+        margin: -30vh auto 50px;
+        background-color: #fff;
+        height: 60vh;
+        box-shadow: 0px 0px 8px #ada4a4;
+        border-radius: 10px;
+        padding: 40px;
+    }
+}
