@@ -19,7 +19,7 @@ const NavBar = () => {
      
       const isQuotationProvider =
           pathname.split('/')[1] === 'provider-quotation';
- console.log(isQuotationProvider);
+
     const isExpired = isTokenExpired(token);
 
     const handleLogout = () => {

@@ -16,6 +16,8 @@ import districtVN from '../constant/VietnamDivision/VietnamDistrict';
 import providerConstant from '../constant/dataMapping/provider';
 import { getCookie } from '../utils/cookies';
 import axios from 'axios';
+import { splitISOToUsualDate } from '../utils/dateFunction';
+import moment from 'moment';
 
 function ProviderQuotation() {
     const [filename, setFilename] = useState('');
@@ -23,21 +25,24 @@ function ProviderQuotation() {
     const [fileError, setFileError] = useState('');
     const { id } = useParams();
 
-    const [provider, setProvider] = useState<any>(null);
+    const [quotationStatus, setQuotationStatus] = useState(1);
 
-    console.log(provider);
+    const [provider, setProvider] = useState<any>(null);
 
     const token = getCookie('accessToken');
 
     const fetchProvider = () => {
-        axiosClientInstance
+        return axiosClientInstance
             .get(`/api/providers/quotations/${id}`)
             .then((resQuotation) => {
+                setQuotationStatus(Number(resQuotation.data.status));
                 axiosClientInstance
                     .get(`/api/providers/${resQuotation.data.providerId}`)
                     .then((providerRes) => {
                         setProvider(providerRes.data);
                     });
+
+                return resQuotation.data;
             });
     };
 
@@ -47,6 +52,7 @@ function ProviderQuotation() {
     );
 
     const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+        setFileError('');
         if (!e.target.files) {
             return;
         }
@@ -65,24 +71,22 @@ function ProviderQuotation() {
 
             axios
                 .post(
-                    `http://localhost:7210/api/providers/quotations/${id}/import-utilities`,
+                    `https://localhost:7210/api/providers/quotations/${id}/import-utilities`,
                     formData,
                     {
                         headers: {
-                            'Content-Type': 'blob',
-                            Authorization: `Bearer ${token}`,
-                            responseType: 'blob'
+                            'Content-Type': 'blob'
                         }
                     }
                 )
                 .then((response) => {
                     // Handle response
                     console.log('File uploaded successfully');
-                    window.location.href = '/';
+                    setQuotationStatus(2);
                 })
                 .catch((error) => {
                     // Handle error
-                    console.error('Error uploading file:', error);
+                    console.log('Error uploading file:', error);
                 });
         } else {
             setFileError('Phải có file excel');
@@ -129,10 +133,11 @@ function ProviderQuotation() {
                         }}
                     >
                         Chúng tôi mong muốn xin báo giá cho các dịch vụ của bên
-                        quý công ty trong khoảng thời gian từ
-                        {} đến ngày {}. Xin quý công ty cung cấp báo giá trên
-                        file excel và gửi lên dưới form sau. Rất vui được hợp
-                        tác với quý công ty
+                        quý công ty trong khoảng thời gian từ &nbsp;
+                        {moment(data.fromDate).format('DD/MM/YYYY')} đến ngày{' '}
+                        {moment(data.toDate).format('DD/MM/YYYY')}. Xin quý
+                        công ty cung cấp báo giá trên file excel và gửi lên dưới
+                        form sau. Rất vui được hợp tác với quý công ty
                     </p>
                 </div>
             </div>
@@ -194,72 +199,96 @@ function ProviderQuotation() {
                         fullWidth
                     />
                 </div>
-                <div>
+
+                {quotationStatus === 2 ? (
                     <div
                         style={{
                             display: 'flex',
                             alignItems: 'center',
                             gap: '20px'
                         }}
+                        className="mt-50 green "
                     >
-                        <h3 style={{ color: 'gray', margin: '20px 0' }}>
-                            Cung cấp thông tin báo giá
-                        </h3>
+                        Đã gửi file excel. Cảm ơn quý công ty đã bỏ thời gian để
+                        submit form.
+                    </div>
+                ) : (
+                    <>
                         <div>
-                            <button
+                            <div
                                 style={{
-                                    padding: '5px 15px',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    backgroundColor: '#232539',
-                                    border: 'none',
-                                    color: '#fff',
-                                    outline: 'none',
-                                    borderRadius: '10px',
-                                    fontSize: '14px'
+                                    gap: '20px'
                                 }}
-                                onClick={handleDownload}
                             >
-                                <FileDownloadIcon />
-                                Tải file excel mẫu
-                            </button>
+                                <h3 style={{ color: 'gray', margin: '20px 0' }}>
+                                    Cung cấp thông tin báo giá
+                                </h3>
+                                <div>
+                                    <button
+                                        style={{
+                                            padding: '5px 15px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            backgroundColor: '#232539',
+                                            border: 'none',
+                                            color: '#fff',
+                                            outline: 'none',
+                                            borderRadius: '10px',
+                                            fontSize: '14px'
+                                        }}
+                                        onClick={handleDownload}
+                                    >
+                                        <FileDownloadIcon />
+                                        Tải file excel mẫu
+                                    </button>
+                                </div>
+                            </div>
+                            <label htmlFor="">
+                                Vui lòng upload file có định dạng excel dưới đây
+                            </label>
+                            <div style={{ marginTop: '10px' }}>
+                                <Button
+                                    component="label"
+                                    variant="outlined"
+                                    startIcon={<UploadFileIcon />}
+                                    sx={{ marginRight: '1rem' }}
+                                >
+                                    Upload Excel
+                                    <input
+                                        type="file"
+                                        accept=".xlsx"
+                                        hidden
+                                        onChange={handleFileUpload}
+                                    />
+                                </Button>
+                                <Box sx={{ display: 'inline-block' }}>
+                                    {filename}
+                                </Box>
+                                {fileError && (
+                                    <Box
+                                        sx={{
+                                            display: 'inline-block',
+                                            color: 'red'
+                                        }}
+                                    >
+                                        {fileError}
+                                    </Box>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                    <label htmlFor="">
-                        Vui lòng upload file có định dạng excel dưới đây
-                    </label>
-                    <div style={{ marginTop: '10px' }}>
                         <Button
-                            component="label"
-                            variant="outlined"
-                            startIcon={<UploadFileIcon />}
-                            sx={{ marginRight: '1rem' }}
+                            sx={{ display: 'flex', marginLeft: 'auto' }}
+                            variant="contained"
+                            onClick={() => {
+                                handleSendFile();
+                            }}
                         >
-                            Upload Excel
-                            <input
-                                type="file"
-                                accept=".xlsx"
-                                hidden
-                                onChange={handleFileUpload}
-                            />
+                            Gửi
                         </Button>
-                        <Box sx={{ display: 'inline-block' }}>{filename}</Box>
-                        {fileError && (
-                            <Box sx={{ display: 'inline-block', color: 'red' }}>
-                                {fileError}
-                            </Box>
-                        )}
-                    </div>
-                </div>
-                <Button
-                    sx={{ display: 'flex', marginLeft: 'auto' }}
-                    variant="contained"
-                    onClick={() => {
-                        handleSendFile();
-                    }}
-                >
-                    Gửi
-                </Button>
+                    </>
+                )}
             </div>
         </main>
     );

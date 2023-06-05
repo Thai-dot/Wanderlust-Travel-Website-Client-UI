@@ -20,7 +20,7 @@ import { ToastContainer } from 'react-toastify';
 import UserPage from './pages/UserPage';
 import Footer from './components/Footer/Footer';
 
-import LocationPage from './pages/LocationPage';
+
 import NotFoundPage from './pages/NotFoundPage';
 import './styles/index.scss';
 import BookingInformation from './components/BookingInformation/BookingInformation';
@@ -29,8 +29,6 @@ import SuccessPaymentPage from './pages/SuccessPaymentPage';
 import CustomerBookingList from './pages/CustomerBookingList';
 import About from './pages/About';
 import ProviderQuotation from './pages/ProviderQuotation';
-
-
 
 const App = () => {
     const queryClient = new QueryClient({
@@ -74,13 +72,12 @@ const App = () => {
                             path="/customer/booking-list"
                             element={<CustomerBookingList />}
                         />
-                        <Route
-                            path="/provider-quotation/:id"
-                            element={<ProviderQuotation />}
-                        />
                     </Route>
+                    <Route
+                        path="/provider-quotation/:id"
+                        element={<ProviderQuotation />}
+                    />
 
-                    <Route path="/location/:id" element={<LocationPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
 
