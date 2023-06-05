@@ -55,7 +55,6 @@ const App = () => {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/filter" element={<FilterPage />} />
-                    <Route path="/provider-quotation/:id" element={<ProviderQuotation />} />
 
                     <Route path="/" element={<PrivateRoute />}>
                         <Route path="/user-setting" element={<UserPage />} />
@@ -74,6 +73,10 @@ const App = () => {
                         <Route
                             path="/customer/booking-list"
                             element={<CustomerBookingList />}
+                        />
+                        <Route
+                            path="/provider-quotation/:id"
+                            element={<ProviderQuotation />}
                         />
                     </Route>
 

@@ -1,22 +1,93 @@
+import React, { ChangeEvent, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Button from '@mui/material/Button/Button';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import React, { ChangeEvent, useState } from 'react';
 import '../styles/components/providerQuotation.scss';
 import TextField from '@mui/material/TextField/TextField';
 import Box from '@mui/material/Box/Box';
+import axiosClientInstance from '../service/axios/axiosClient/axiosClient';
+import wardVN from '../constant/VietnamDivision/VietnamWard';
+import { useQuery } from 'react-query';
+import { CircularProgress } from '@mui/material';
+import Error from '../components/Error/Error';
+import provinceVN from '../constant/VietnamDivision/VietnamProvince';
+import districtVN from '../constant/VietnamDivision/VietnamDistrict';
+import providerConstant from '../constant/dataMapping/provider';
+import { getCookie } from '../utils/cookies';
+import axios from 'axios';
 
 function ProviderQuotation() {
     const [filename, setFilename] = useState('');
+    const [fileExcel, setFileExcel] = useState<File | null>(null);
+    const [fileError, setFileError] = useState('');
+    const { id } = useParams();
+
+    const [provider, setProvider] = useState<any>(null);
+
+    console.log(provider);
+
+    const token = getCookie('accessToken');
+
+    const fetchProvider = () => {
+        axiosClientInstance
+            .get(`/api/providers/quotations/${id}`)
+            .then((resQuotation) => {
+                axiosClientInstance
+                    .get(`/api/providers/${resQuotation.data.providerId}`)
+                    .then((providerRes) => {
+                        setProvider(providerRes.data);
+                    });
+            });
+    };
+
+    const { isLoading, error, data, refetch } = useQuery(
+        'myDataFetch',
+        fetchProvider
+    );
 
     const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) {
             return;
         }
         const file = e.target.files[0];
+        setFileExcel(file);
         const { name } = file;
         setFilename(name);
     };
+
+    function handleSendFile() {
+        //const file = event.target.files[0];
+        setFileError('');
+        if (fileExcel) {
+            const formData = new FormData();
+            formData.append('file', fileExcel);
+
+            axios
+                .post(
+                    `http://localhost:7210/api/providers/quotations/${id}/import-utilities`,
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'blob',
+                            Authorization: `Bearer ${token}`,
+                            responseType: 'blob'
+                        }
+                    }
+                )
+                .then((response) => {
+                    // Handle response
+                    console.log('File uploaded successfully');
+                    window.location.href = '/';
+                })
+                .catch((error) => {
+                    // Handle error
+                    console.error('Error uploading file:', error);
+                });
+        } else {
+            setFileError('Phải có file excel');
+        }
+    }
 
     const handleDownload = () => {
         fetch('quotation_sample_file.xlsx').then((response) => {
@@ -31,6 +102,11 @@ function ProviderQuotation() {
             });
         });
     };
+
+    if (isLoading) return <CircularProgress />;
+
+    if (error) return <Error error={error} />;
+
     return (
         <main className="main-page">
             <div className="quotation-banner">
@@ -74,7 +150,7 @@ function ProviderQuotation() {
                     <TextField
                         id="outlined-read-only-input"
                         label="Tên nhà cung cấp"
-                        defaultValue={'Ánh Sao Xanh'}
+                        value={provider?.providerName ?? ''}
                         InputProps={{
                             readOnly: true
                         }}
@@ -83,9 +159,21 @@ function ProviderQuotation() {
                     <TextField
                         id="outlined-read-only-input"
                         label="Địa chỉ nhà cung cấp"
-                        defaultValue={
-                            '202 Tô Hiệu, phường Hiệp Tân, quận Tân Phú, thành phố Hồ Chí Minh'
-                        }
+                        value={`${provider?.providerAddress ?? ''}, ${
+                            wardVN.filter(
+                                (ward) => ward.code === provider?.providerWard
+                            )[0]?.name
+                        }, ${
+                            districtVN.filter(
+                                (district) =>
+                                    district.code === provider?.providerDistrict
+                            )[0]?.name
+                        },${
+                            provinceVN.filter(
+                                (province) =>
+                                    province.code === provider?.providerCity
+                            )[0]?.name
+                        } `}
                         InputProps={{
                             readOnly: true
                         }}
@@ -94,7 +182,12 @@ function ProviderQuotation() {
                     <TextField
                         id="outlined-read-only-input"
                         label="Loại hình"
-                        defaultValue={'Khách sạn'}
+                        value={
+                            providerConstant.filter(
+                                (getProvider) =>
+                                    getProvider.value === provider?.categoryId
+                            )[0]?.label
+                        }
                         InputProps={{
                             readOnly: true
                         }}
@@ -151,11 +244,19 @@ function ProviderQuotation() {
                             />
                         </Button>
                         <Box sx={{ display: 'inline-block' }}>{filename}</Box>
+                        {fileError && (
+                            <Box sx={{ display: 'inline-block', color: 'red' }}>
+                                {fileError}
+                            </Box>
+                        )}
                     </div>
                 </div>
                 <Button
                     sx={{ display: 'flex', marginLeft: 'auto' }}
                     variant="contained"
+                    onClick={() => {
+                        handleSendFile();
+                    }}
                 >
                     Gửi
                 </Button>
