@@ -71,7 +71,7 @@ function ProviderQuotation() {
 
             axios
                 .post(
-                    `https://localhost:7210/api/providers/quotations/${id}/import-utilities`,
+                    `${process.env.REACT_APP_BACKEND_HOST}/api/providers/quotations/${id}/import-utilities`,
                     formData,
                     {
                         headers: {

@@ -19,7 +19,7 @@ function valuetext(value: number) {
     return `${value}°C`;
 }
 
-const minDistance = 0;
+const minDistance = 1000000;
 
 const Filter = () => {
     const [filterTours, setFilterTours] = useState<any>([]);
@@ -43,7 +43,7 @@ const Filter = () => {
 
     const [filter, setFilter] = useState<any>({
         minPrice: 0,
-        maxPrice: 500000000,
+        maxPrice: 100000000,
         startDate: moment().format('L'),
         endDate: ''
     });
@@ -58,7 +58,9 @@ const Filter = () => {
                         filter.endDate === ''
                             ? ''
                             : moment(filter.endDate.$d).format('L')
-                    }`
+                    }`,
+                    fromPrice: filter.minPrice,
+                    toPrice: filter.maxPrice
                 }
             })
             .then((res) => res.data);
@@ -81,7 +83,7 @@ const Filter = () => {
 
     React.useEffect(() => {
         refetch();
-    }, [page]);
+    }, [page, filter.minPrice, filter.maxPrice]);
 
     useEffect(() => {
         if (data) {
@@ -93,7 +95,23 @@ const Filter = () => {
         event: Event,
         newValue: number | number[],
         activeThumb: number
-    ) => {};
+    ) => {
+        if (!Array.isArray(newValue)) {
+            return;
+        }
+
+        if (activeThumb === 0) {
+            setFilter({
+                ...filter,
+                minPrice: Math.min(newValue[0], filter.maxPrice - minDistance)
+            });
+        } else {
+            setFilter({
+                ...filter,
+                maxPrice: Math.max(newValue[1], filter.minPrice + minDistance)
+            });
+        }
+    };
 
     const handleFilter = () => {
         refetch();
@@ -112,16 +130,21 @@ const Filter = () => {
                         onChange={handleChange}
                         valueLabelDisplay="auto"
                         getAriaValueText={valuetext}
-                        max={500000000}
+                        max={100000000}
+                        disableSwap
                     />
                     <div className="items">
                         <div className="item">
                             <p>Giá thấp nhất</p>
-                            <span>{filter.minPrice}vnd</span>
+                            <span>
+                                {Intl.NumberFormat().format(filter.minPrice)}vnd
+                            </span>
                         </div>
                         <div className="item">
                             <p>Giá cao nhất</p>
-                            <span>{filter.maxPrice}vnd</span>
+                            <span>
+                                {Intl.NumberFormat().format(filter.maxPrice)}vnd
+                            </span>
                         </div>
                     </div>
                 </div>
