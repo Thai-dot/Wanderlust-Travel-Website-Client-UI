@@ -29,8 +29,6 @@ function ProviderQuotation() {
 
     const [provider, setProvider] = useState<any>(null);
 
-    const token = getCookie('accessToken');
-
     const fetchProvider = () => {
         return axiosClientInstance
             .get(`/api/providers/quotations/${id}`)

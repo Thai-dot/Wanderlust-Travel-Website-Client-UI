@@ -58,7 +58,7 @@ const Filter = () => {
                         filter.endDate === ''
                             ? ''
                             : moment(filter.endDate.$d).format('L')
-                    }`,
+                    },status==1`,
                     fromPrice: filter.minPrice,
                     toPrice: filter.maxPrice
                 }

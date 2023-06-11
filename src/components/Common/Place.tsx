@@ -14,16 +14,28 @@ interface PlaceProp {
     tourDateCode: number;
     date: any;
     id: number;
-    sellingPrice:number;
+    sellingPrice: number;
 }
 
-const Place: React.FC<PlaceProp> = ({ tour, tourDateCode, date, id,sellingPrice }) => {
+const Place: React.FC<PlaceProp> = ({
+    tour,
+    tourDateCode,
+    date,
+    id,
+    sellingPrice
+}) => {
+
+    console.log(tour)   ;
     return (
         <div className="place">
             <div className="place__image">
                 <AiOutlineHeart style={{ cursor: 'pointer' }} />
                 <img
-                    src={tour.tourImage !== null ? tour.tourImage : exampleImg}
+                    src={
+                         tour.tourImage.length === 0
+                            ? exampleImg
+                            : tour.tourImage
+                    }
                     alt="place img"
                 />
             </div>

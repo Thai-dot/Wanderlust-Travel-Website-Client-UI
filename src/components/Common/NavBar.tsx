@@ -63,14 +63,14 @@ const NavBar = () => {
                         <div>
                             <Link to="/home">
                                 <button className="dropdown__button">
-                                    Home
+                                    Trang chủ
                                 </button>
                             </Link>
                         </div>
                         <div className="dropdown">
                             <Link to="/about">
                                 <button className="dropdown__button">
-                                    About
+                                    Về chúng tôi
                                 </button>
                             </Link>
                             {/* <div className="dropdown__menu"></div> */}

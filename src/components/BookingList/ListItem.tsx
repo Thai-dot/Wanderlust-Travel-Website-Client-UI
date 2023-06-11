@@ -5,6 +5,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import classNames from 'classnames';
 import { Button } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 import axiosClientInstance from '../../service/axios/axiosClient/axiosClient';
 import moment from 'moment';
 
@@ -66,8 +68,16 @@ export default function ListItem(props: ListItemType) {
             )}
         >
             <div className="bookingName">{bookingName}</div>
+
             <div className="d-flex gap-2 align-center">
                 <div className="bookingPrice">
+                    {statusType === 1 && (
+                        <div>
+                            { price && Intl.NumberFormat().format(
+                                Math.round(price * 0.7)
+                            )}vnđ/
+                        </div>
+                    )}{' '}
                     {Intl.NumberFormat().format(price ?? 0)}
                     &nbsp;vnđ
                 </div>
@@ -80,38 +90,48 @@ export default function ListItem(props: ListItemType) {
                         aria-expanded={open ? 'true' : undefined}
                         onClick={handleClick}
                     >
-                        <PaymentOutlinedIcon
-                            sx={{
-                                color: '#59b2d6',
-                                cursor: 'pointer',
-                                fontSize: '16px'
-                            }}
-                        />
+                        <Tooltip title="Thanh toán">
+                            <IconButton>
+                                <PaymentOutlinedIcon
+                                    sx={{
+                                        color: '#59b2d6',
+                                        cursor: 'pointer',
+                                        fontSize: '16px'
+                                    }}
+                                />
+                            </IconButton>
+                        </Tooltip>
                     </Button>
                 )}
 
                 {statusType === 1 && (
-                    <PaymentOutlinedIcon
-                        sx={{
-                            color: '#59b2d6',
-                            cursor: 'pointer',
-                            fontSize: '16px'
-                        }}
-                        onClick={() => {
-                            handlePayment(id, price, statusType);
-                        }}
-                    />
+                    <Tooltip title="Thanh toán phần còn lại">
+                        <IconButton>
+                            <PaymentOutlinedIcon
+                                sx={{
+                                    color: '#59b2d6',
+                                    cursor: 'pointer',
+                                    fontSize: '16px'
+                                }}
+                                onClick={() => {
+                                    handlePayment(id, price, statusType);
+                                }}
+                            />
+                        </IconButton>
+                    </Tooltip>
                 )}
 
                 {statusType === 0 && (
-                    <RemoveOutlinedIcon
-                        sx={{
-                            color: 'red',
-                            cursor: 'pointer',
-                            fontSize: '16px'
-                        }}
-                        onClick={() => handleRemove(id)}
-                    />
+                    <Tooltip title="Xóa">
+                        <RemoveOutlinedIcon
+                            sx={{
+                                color: 'red',
+                                cursor: 'pointer',
+                                fontSize: '16px'
+                            }}
+                            onClick={() => handleRemove(id)}
+                        />
+                    </Tooltip>
                 )}
             </div>
 
