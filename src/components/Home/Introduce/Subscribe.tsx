@@ -3,7 +3,7 @@ import SubscribeImage from "../../../assets/images/subscribe.png";
 
 const Subscribe = () => {
   return (
-    <div className="subscribe">
+    <div className="subscribe mb-40 mt-40">
       <div className="subscribe__image">
         <img src={SubscribeImage} alt="subscribe" />
       </div>

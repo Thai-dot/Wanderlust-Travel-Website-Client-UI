@@ -18,6 +18,8 @@ import { getCookie } from '../utils/cookies';
 import axios from 'axios';
 import { splitISOToUsualDate } from '../utils/dateFunction';
 import moment from 'moment';
+import handleUploadFireBase from '../service/firebase/uploadFirebase/handleUpload';
+import storage from '../service/firebase/uploadFirebase/uploadFirebase';
 
 function ProviderQuotation() {
     const [filename, setFilename] = useState('');
@@ -60,26 +62,25 @@ function ProviderQuotation() {
         setFilename(name);
     };
 
-    function handleSendFile() {
+    async function handleSendFile() {
         //const file = event.target.files[0];
         setFileError('');
         if (fileExcel) {
+            const downloadURL = await handleUploadFireBase(
+                fileExcel,
+                storage
+            ).then((res: string) => res);
+
             const formData = new FormData();
             formData.append('file', fileExcel);
 
-            axios
+            axiosClientInstance
                 .post(
-                    `${process.env.REACT_APP_BACKEND_HOST}/api/providers/quotations/${id}/import-utilities`,
-                    formData,
-                    {
-                        headers: {
-                            'Content-Type': 'blob'
-                        }
-                    }
+                    `/api/providers/quotations/${id}/save-excel-file-url`,
+                    downloadURL
                 )
-                .then((response) => {
-                    // Handle response
-                    console.log('File uploaded successfully');
+                .then((res) => {
+                    window.location.reload();
                     setQuotationStatus(2);
                 })
                 .catch((error) => {
@@ -92,17 +93,13 @@ function ProviderQuotation() {
     }
 
     const handleDownload = () => {
-        fetch('quotation_sample_file.xlsx').then((response) => {
-            response.blob().then((blob) => {
-                // Creating new object of PDF file
-                const fileURL = window.URL.createObjectURL(blob);
-                // Setting various property values
-                let alink = document.createElement('a');
-                alink.href = fileURL;
-                alink.download = 'Sample_File.xlsx';
-                alink.click();
-            });
-        });
+        const link = document.createElement('a');
+        link.href =
+            'https://firebasestorage.googleapis.com/v0/b/fileupload-travel-managementui.appspot.com/o/providerQuotationFile%2FSample_File.xlsx?alt=media&token=b847828e-cc2f-4204-8d8a-2272db06e0d0'; // Assign the file URL to the anchor's href property
+        link.download = 'example.xlsx'; // Specify the filename for the downloaded file
+
+        // Simulate a click on the anchor element
+        link.click();
     };
 
     if (isLoading) return <CircularProgress />;
@@ -133,9 +130,9 @@ function ProviderQuotation() {
                         Chúng tôi mong muốn xin báo giá cho các dịch vụ của bên
                         quý công ty trong khoảng thời gian từ &nbsp;
                         {moment(data.fromDate).format('DD/MM/YYYY')} đến ngày{' '}
-                        {moment(data.toDate).format('DD/MM/YYYY')}. Xin quý
-                        công ty cung cấp báo giá trên file excel và gửi lên dưới
-                        form sau. Rất vui được hợp tác với quý công ty
+                        {moment(data.toDate).format('DD/MM/YYYY')}. Xin quý công
+                        ty cung cấp báo giá trên file excel và gửi lên dưới form
+                        sau. Rất vui được hợp tác với quý công ty
                     </p>
                 </div>
             </div>

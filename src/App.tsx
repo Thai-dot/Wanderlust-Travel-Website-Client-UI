@@ -15,11 +15,8 @@ import FilterPage from './pages/FilterPage';
 import { Fragment } from 'react';
 import PrivateRoute from './components/Common/PrivateRoute';
 import 'react-loading-skeleton/dist/skeleton.css';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
 import UserPage from './pages/UserPage';
 import Footer from './components/Footer/Footer';
-
 
 import NotFoundPage from './pages/NotFoundPage';
 import './styles/index.scss';
@@ -29,6 +26,7 @@ import SuccessPaymentPage from './pages/SuccessPaymentPage';
 import CustomerBookingList from './pages/CustomerBookingList';
 import About from './pages/About';
 import ProviderQuotation from './pages/ProviderQuotation';
+import TourDateProvider from './pages/TourDateProvider';
 
 const App = () => {
     const queryClient = new QueryClient({
@@ -77,11 +75,15 @@ const App = () => {
                         path="/provider-quotation/:id"
                         element={<ProviderQuotation />}
                     />
+                    <Route
+                        path="/provider-tourdate/:id"
+                        element={<TourDateProvider />}
+                    />
 
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
 
-                <ToastContainer autoClose={1000} />
+           
                 <Footer />
             </Fragment>
         </QueryClientProvider>

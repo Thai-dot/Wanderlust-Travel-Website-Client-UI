@@ -3,7 +3,6 @@ import { AiFillStar, AiOutlineHeart } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
 import BookingHotel from "./Booking/BookingHotel";
 import About from "./DescriptionItems/About";
-import SwiperHotel from "../Swiper/SwiperHotel";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { hotelAction } from "../../features/hotel/hotelSlice";
@@ -138,10 +137,7 @@ const Description = () => {
           </div>
         </div>
       )}
-      <div className="recommend">
-        <h1>Explore other options</h1>
-        <SwiperHotel />
-      </div>
+ 
     </Fragment>
   );
 };

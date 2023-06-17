@@ -3,10 +3,7 @@ import { AiFillStar, AiOutlineHeart } from 'react-icons/ai';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SellIcon from '@mui/icons-material/Sell';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { favouriteAction } from '../../features/favourite/favouriteSlice';
-import { Hotel } from '../../models/hotel';
 import exampleImg from '../../assets/images/California.jpg';
 
 interface PlaceProp {

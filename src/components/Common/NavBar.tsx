@@ -14,11 +14,12 @@ import { isTokenExpired } from '../../utils/jwtFunction';
 const NavBar = () => {
     const token = getCookie('accessToken') ?? '';
 
-      const location = useLocation();
-      const pathname = location.pathname;
-     
-      const isQuotationProvider =
-          pathname.split('/')[1] === 'provider-quotation';
+    const location = useLocation();
+    const pathname = location.pathname;
+
+    const isQuotationProvider =
+        pathname.split('/')[1] === 'provider-quotation' ||
+        pathname.split('/')[1] === 'provider-tourdate';
 
     const isExpired = isTokenExpired(token);
 
