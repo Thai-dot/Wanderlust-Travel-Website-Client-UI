@@ -76,7 +76,7 @@ const App = () => {
                         element={<ProviderQuotation />}
                     />
                     <Route
-                        path="/provider-tourdate/:id"
+                        path="/provider-tourdate/:costID/:providerID"
                         element={<TourDateProvider />}
                     />
 
