@@ -44,7 +44,7 @@ const Filter = () => {
     const [filter, setFilter] = useState<any>({
         minPrice: 0,
         maxPrice: 100000000,
-        startDate: moment().format('L'),
+        startDate: moment(),
         endDate: ''
     });
 
@@ -54,11 +54,15 @@ const Filter = () => {
                 params: {
                     Page: page,
                     PageSize: 9,
-                    Filters: `date>${moment().format('L')},date<=${
+                    Filters: `date>=${moment(filter.startDate.$d).format(
+                        'YYYY-MM-DD'
+                    )}${
                         filter.endDate === ''
                             ? ''
-                            : moment(filter.endDate.$d).format('L')
-                    },status==1`,
+                            : ',date <='.concat(
+                                  moment(filter.endDate.$d).format('YYYY-MM-DD')
+                              )
+                    }`,
                     fromPrice: filter.minPrice,
                     toPrice: filter.maxPrice
                 }
