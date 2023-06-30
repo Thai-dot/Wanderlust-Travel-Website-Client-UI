@@ -23,7 +23,9 @@ export default function PolicyTour(props: PolicyTourProps) {
                         <Typography sx={{fontFamily : 'DM Sans', fontWeight: 'bold', fontSize: '18px'}}>Các chính sách bao gồm</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography sx={{fontFamily : 'DM Sans'}}>{policyData.containInformation}</Typography>
+                        <Typography sx={{fontFamily : 'DM Sans'}}>
+                            <div dangerouslySetInnerHTML={{__html: policyData.containInformation}}></div>
+                        </Typography>
                     </AccordionDetails>
                 </Accordion>
             </div>
@@ -37,7 +39,9 @@ export default function PolicyTour(props: PolicyTourProps) {
                         <Typography sx={{fontFamily : 'DM Sans', fontWeight: 'bold', fontSize: '18px'}}>Các chính sách không bao gồm</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography sx={{fontFamily : 'DM Sans'}}>{policyData.notContainPolicy}</Typography>
+                        <Typography sx={{fontFamily : 'DM Sans'}}>
+                            <div dangerouslySetInnerHTML={{__html: policyData.notContainPolicy}}></div>
+                            </Typography>
                     </AccordionDetails>
                 </Accordion>
             </div>
@@ -51,7 +55,10 @@ export default function PolicyTour(props: PolicyTourProps) {
                         <Typography sx={{fontFamily : 'DM Sans', fontWeight: 'bold', fontSize: '18px'}}>Chính sách dành cho trẻ em</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography sx={{fontFamily : 'DM Sans'}}>{policyData.childrenPolicy}</Typography>
+                        <Typography sx={{fontFamily : 'DM Sans'}}>
+                        <div dangerouslySetInnerHTML={{__html: policyData.childrenPolicy}}>
+                        </div>
+                            </Typography>
                     </AccordionDetails>
                 </Accordion>
             </div>
@@ -65,7 +72,8 @@ export default function PolicyTour(props: PolicyTourProps) {
                         <Typography sx={{fontFamily : 'DM Sans', fontWeight: 'bold', fontSize: '18px'}}>Chính sách thanh toán</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography sx={{fontFamily : 'DM Sans'}}>{policyData.paymentPolicy}</Typography>
+                        <Typography sx={{fontFamily : 'DM Sans'}}><div dangerouslySetInnerHTML={{__html: policyData.paymentPolicy}}>
+                        </div></Typography>
                     </AccordionDetails>
                 </Accordion>
             </div>
